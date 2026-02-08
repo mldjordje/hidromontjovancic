@@ -1,0 +1,295 @@
+<?php
+
+declare(strict_types=1);
+
+function allow_cors(array $config): void
+{
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    if ($origin && in_array($origin, $config['cors']['origins'], true)) {
+        header('Access-Control-Allow-Origin: ' . $origin);
+        header('Vary: Origin');
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(204);
+        exit;
+    }
+}
+
+function send_json($data, int $status = 200): void
+{
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+}
+
+function set_public_cache_headers(int $ttl): void
+{
+    if ($ttl <= 0) {
+        return;
+    }
+    $swr = $ttl * 4;
+    header('Cache-Control: public, max-age=' . $ttl . ', stale-while-revalidate=' . $swr);
+    header('Vary: Accept-Encoding');
+}
+
+function send_json_cached(string $json, int $status, int $ttl): void
+{
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    set_public_cache_headers($ttl);
+    echo $json;
+    exit;
+}
+
+function error_json(int $status, string $message): void
+{
+    send_json(['error' => $message], $status);
+}
+
+function slugify(string $value): string
+{
+    $value = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
+    $value = strtolower(trim($value));
+    $value = preg_replace('/[^a-z0-9]+/', '-', $value) ?? '';
+    $value = trim($value, '-');
+    return $value ?: 'item-' . uniqid();
+}
+
+function sanitize_filename(string $name): string
+{
+    $name = preg_replace('/[^a-zA-Z0-9-_\.]/', '_', $name) ?? 'file';
+    return trim($name, '_');
+}
+
+function cache_ttl(array $config): int
+{
+    return (int) ($config['cache']['ttl'] ?? 0);
+}
+
+function cache_dir(array $config): ?string
+{
+    $dir = (string) ($config['cache']['dir'] ?? '');
+    if ($dir === '') {
+        return null;
+    }
+    if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
+        return null;
+    }
+    return rtrim($dir, '/\\');
+}
+
+function cache_key(string $namespace, array $parts = []): string
+{
+    $raw = $namespace . ':' . implode(':', $parts);
+    return hash('sha256', $raw);
+}
+
+function cache_get(array $config, string $key): ?string
+{
+    $ttl = cache_ttl($config);
+    if ($ttl <= 0) {
+        return null;
+    }
+    $dir = cache_dir($config);
+    if (!$dir) {
+        return null;
+    }
+    $path = $dir . '/' . $key . '.json';
+    if (!is_file($path)) {
+        return null;
+    }
+    $mtime = filemtime($path);
+    if ($mtime === false || ($mtime + $ttl) < time()) {
+        @unlink($path);
+        return null;
+    }
+    $payload = file_get_contents($path);
+    return $payload !== false ? $payload : null;
+}
+
+function cache_put(array $config, string $key, string $payload): void
+{
+    $ttl = cache_ttl($config);
+    if ($ttl <= 0) {
+        return;
+    }
+    $dir = cache_dir($config);
+    if (!$dir) {
+        return;
+    }
+    $path = $dir . '/' . $key . '.json';
+    @file_put_contents($path, $payload, LOCK_EX);
+}
+
+function ensure_upload_dir(array $config, int $projectId): string
+{
+    $dir = rtrim($config['uploads']['dir'], '/\\') . '/' . $projectId;
+    if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
+        throw new RuntimeException('Cannot create upload directory');
+    }
+    return $dir;
+}
+
+function store_upload(array $config, array $file, int $projectId, array $allowedMime): string
+{
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        throw new RuntimeException('Upload failed with code ' . ($file['error'] ?? 'unknown'));
+    }
+
+    if (($file['size'] ?? 0) <= 0 || $file['size'] > $config['uploads']['max_size']) {
+        throw new RuntimeException('File too large');
+    }
+
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime = $finfo->file($file['tmp_name']);
+    if (!$mime || !in_array($mime, $allowedMime, true)) {
+        throw new RuntimeException('Invalid mime type');
+    }
+
+    $ext = match ($mime) {
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+        'image/heic' => 'heic',
+        'image/heif' => 'heif',
+        default => 'bin',
+    };
+
+    $dir = ensure_upload_dir($config, $projectId);
+    $name = pathinfo($file['name'] ?? ('file.' . $ext), PATHINFO_FILENAME);
+    $safe = sanitize_filename($name);
+    $target = $dir . '/' . $safe . '-' . uniqid() . '.' . $ext;
+
+    if (!move_uploaded_file($file['tmp_name'], $target)) {
+        throw new RuntimeException('Failed to move upload');
+    }
+
+    // Store relative path (without uploads/projects prefix) so base_url can prepend correctly.
+    $relative = $projectId . '/' . basename($target);
+    return $relative;
+}
+
+function ensure_upload_dir_products(array $config, int $productId): string
+{
+    $dir = rtrim($config['uploads_products']['dir'], '/\\') . '/' . $productId;
+    if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
+        throw new RuntimeException('Cannot create product upload directory');
+    }
+    return $dir;
+}
+
+function resolve_upload_ext(string $mime, array $mimeMap): string
+{
+    if (isset($mimeMap[$mime])) {
+        return $mimeMap[$mime];
+    }
+    return match ($mime) {
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+        'image/heic' => 'heic',
+        'image/heif' => 'heif',
+        default => 'bin',
+    };
+}
+
+function store_product_upload(array $config, array $file, int $productId, array $allowedMime, array $mimeMap = []): string
+{
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        throw new RuntimeException('Upload failed with code ' . ($file['error'] ?? 'unknown'));
+    }
+
+    if (($file['size'] ?? 0) <= 0 || $file['size'] > $config['uploads_products']['max_size']) {
+        throw new RuntimeException('File too large');
+    }
+
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime = $finfo->file($file['tmp_name']);
+    if (!$mime || !in_array($mime, $allowedMime, true)) {
+        throw new RuntimeException('Invalid mime type');
+    }
+
+    $ext = resolve_upload_ext($mime, $mimeMap);
+
+    $dir = ensure_upload_dir_products($config, $productId);
+    $name = pathinfo($file['name'] ?? ('file.' . $ext), PATHINFO_FILENAME);
+    $safe = sanitize_filename($name);
+    $target = $dir . '/' . $safe . '-' . uniqid() . '.' . $ext;
+
+    if (!move_uploaded_file($file['tmp_name'], $target)) {
+        throw new RuntimeException('Failed to move upload');
+    }
+
+    $relative = $productId . '/' . basename($target);
+    return $relative;
+}
+
+function build_upload_url(array $config, string $key, string $relative): ?string
+{
+    $relative = trim($relative);
+    if ($relative === '') {
+        return null;
+    }
+    if (preg_match('~^https?://~i', $relative) || str_starts_with($relative, '/uploads/')) {
+        return $relative;
+    }
+    $base = (string) ($config[$key]['base_url'] ?? '');
+    if ($base === '') {
+        return $relative;
+    }
+    return rtrim($base, '/') . '/' . ltrim($relative, '/');
+}
+
+function header_safe(string $value): string
+{
+    return str_replace(["\r", "\n"], '', $value);
+}
+
+function notify_order_via_email(array $config, array $order): bool
+{
+    $mail = $config['mail'] ?? [];
+    $to = (string) ($mail['orders_to'] ?? '');
+    if ($to === '') {
+        return false;
+    }
+
+    $fromEmail = header_safe((string) ($mail['from'] ?? 'noreply@hidromontjovancic.rs'));
+    $fromName = header_safe((string) ($mail['from_name'] ?? 'Hidromont Jovancic'));
+    $prefix = (string) ($mail['subject_prefix'] ?? '');
+
+    $customerEmail = trim((string) ($order['email'] ?? ''));
+    $replyTo = filter_var($customerEmail, FILTER_VALIDATE_EMAIL) ? header_safe($customerEmail) : '';
+
+    $shortSubject = trim((string) ($order['subject'] ?? ''));
+    $subject = $prefix . 'Novi upit sa forme' . ($shortSubject !== '' ? (': ' . $shortSubject) : '');
+    $subject = header_safe($subject);
+
+    $lines = [];
+    $lines[] = 'Novi upit sa forme na sajtu Hidromont Jovancic';
+    $lines[] = 'Vreme: ' . date('Y-m-d H:i:s');
+    $lines[] = '';
+    $lines[] = 'Ime: ' . (string) ($order['name'] ?? '');
+    $lines[] = 'Email: ' . (string) ($order['email'] ?? '');
+    $lines[] = 'Telefon: ' . (string) ($order['phone'] ?? '');
+    $lines[] = 'Tema: ' . (string) ($order['subject'] ?? '');
+    $lines[] = 'Tip usluge: ' . (string) ($order['concrete_type'] ?? '');
+    $lines[] = '';
+    $lines[] = "Poruka:\n" . (string) ($order['message'] ?? '');
+    $body = implode("\n", $lines);
+
+    $headers = [];
+    $headers[] = 'MIME-Version: 1.0';
+    $headers[] = 'Content-Type: text/plain; charset=UTF-8';
+    $headers[] = 'Content-Transfer-Encoding: 8bit';
+    $headers[] = 'From: ' . ($fromName !== '' ? "{$fromName} <{$fromEmail}>" : $fromEmail);
+    if ($replyTo !== '') {
+        $headers[] = 'Reply-To: ' . $replyTo;
+    }
+
+    return @mail($to, $subject, $body, implode("\r\n", $headers));
+}
