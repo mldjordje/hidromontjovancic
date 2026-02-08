@@ -18,12 +18,7 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
-# Keep legacy source but skip heavy build artifacts
-prevozkop/frontend/node_modules/
-prevozkop/frontend/.next/
-prevozkop/frontend/.turbo/
-
-# Optional local uploads cache
-backend/api/cache/
-
+# Local-only sources
 prevozkop/
+backend/
+legacy/

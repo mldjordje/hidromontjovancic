@@ -1,4 +1,4 @@
-import type { Order, Project, Product } from "./api";
+import type { Order, Project } from "./api";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost/api";
 
@@ -90,86 +90,6 @@ export async function adminDeleteProject(id: number) {
 export async function adminGetProject(id: number) {
   return adminFetch<Project>(`/admin/projects/${id}`, {
     method: "GET",
-  });
-}
-
-export async function adminListProducts(params: {
-  status?: string;
-  category?: string;
-  q?: string;
-  limit?: number;
-  offset?: number;
-} = {}) {
-  const search = new URLSearchParams();
-  if (params.status) search.set("status", params.status);
-  if (params.category) search.set("category", params.category);
-  if (params.q) search.set("q", params.q);
-  if (params.limit) search.set("limit", String(params.limit));
-  if (params.offset) search.set("offset", String(params.offset));
-  const qs = search.toString();
-  return adminFetch<{ data: Product[]; meta: { limit: number; offset: number } }>(
-    qs ? `/admin/products?${qs}` : "/admin/products",
-    { method: "GET" }
-  );
-}
-
-export async function adminCreateProduct(payload: Partial<Product> & { name: string; category: string }) {
-  return adminFetch<Product>("/admin/products", {
-    method: "POST",
-    json: payload,
-  });
-}
-
-export async function adminUpdateProduct(id: number, payload: Partial<Product>) {
-  return adminFetch<Product>(`/admin/products/${id}`, {
-    method: "PUT",
-    json: payload,
-  });
-}
-
-export async function adminDeleteProduct(id: number) {
-  return adminFetch<{ ok: boolean }>(`/admin/products/${id}`, {
-    method: "DELETE",
-  });
-}
-
-export async function adminGetProduct(id: number) {
-  return adminFetch<Product>(`/admin/products/${id}`, {
-    method: "GET",
-  });
-}
-
-export async function uploadProductImage(id: number, file: File) {
-  const form = new FormData();
-  form.append("file", file);
-  return adminFetch<{ image: string }>(`/admin/products/${id}/image`, {
-    method: "POST",
-    body: form,
-  });
-}
-
-export async function uploadProductGalleryImage(id: number, file: File, alt?: string) {
-  const form = new FormData();
-  form.append("file", file);
-  if (alt) form.append("alt", alt);
-  return adminFetch<{ id: number; file: string; file_path: string }>(`/admin/products/${id}/media`, {
-    method: "POST",
-    body: form,
-  });
-}
-
-export async function deleteProductGalleryImage(productId: number, mediaId: number) {
-  return adminFetch<{ ok: boolean }>(`/admin/products/${productId}/media/${mediaId}`, {
-    method: "DELETE",
-  });
-}
-
-export async function uploadProductDocument(id: number, file: File) {
-  const form = new FormData();
-  form.append("file", file);
-  return adminFetch<{ document: string }>(`/admin/products/${id}/document`, {
-    method: "POST",
-    body: form,
   });
 }
 
