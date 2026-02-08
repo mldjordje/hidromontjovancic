@@ -17,7 +17,7 @@ export default function AboutPage() {
         title="O kompaniji Hidromont Jovancic"
         kicker="O nama"
         description="Radimo precizno, odgovorno i u skladu sa projektom - od pripreme terena do zavrsne montaze."
-        background="/img/volvonov2.webp"
+        background="/oldsite/p6.jpg"
         priority
         actions={[{ label: "Kontakt", href: "/kontakt#forma" }]}
       />

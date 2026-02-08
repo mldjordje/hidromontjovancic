@@ -17,7 +17,12 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const featuredServices = services.slice(0, 4);
+  const featuredServices = services;
+  const projectShortcuts = [
+    { title: "Realizovani projekti", image: "/oldsite/gotov1.jpg", href: "/projekti" },
+    { title: "Projekti u realizaciji", image: "/oldsite/radise3.jpg", href: "/projekti" },
+    { title: "Planirani projekti", image: "/oldsite/uskoro2.jpg", href: "/projekti" },
+  ];
   let featuredProjects: Project[] = [];
 
   try {
@@ -71,13 +76,27 @@ export default async function HomePage() {
             </div>
           </ScrollReveal>
 
-          <ScrollReveal
-            from="right"
-            className="relative overflow-hidden rounded-3xl border border-black/5 shadow-xl"
-          >
-            <img src="/img/napolje1.webp" alt="Terenski radovi" className="h-full w-full object-cover" />
+          <ScrollReveal from="right" className="relative overflow-hidden rounded-3xl border border-black/5 shadow-xl">
+            <img src="/oldsite/p8.jpg" alt="Terenski radovi" className="h-full w-full object-cover" />
           </ScrollReveal>
         </div>
+      </section>
+
+      <section className="content-section">
+        <StaggerReveal className="grid gap-6 md:grid-cols-3">
+          {projectShortcuts.map((item) => (
+            <ScrollReveal key={item.title} from="up">
+              <Link href={item.href} className="group block overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">
+                <div className="h-48 overflow-hidden">
+                  <img src={item.image} alt={item.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                </div>
+                <div className="p-5">
+                  <h3 className="text-lg font-semibold text-dark">{item.title}</h3>
+                </div>
+              </Link>
+            </ScrollReveal>
+          ))}
+        </StaggerReveal>
       </section>
 
       <section className="content-section space-y-8">
@@ -94,11 +113,11 @@ export default async function HomePage() {
             </Link>
           </ScrollReveal>
         </div>
-        <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {featuredServices.map((service) => (
             <ScrollReveal key={service.title} from="up" className="h-full">
               <TiltCard className="group relative h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">
-                <div className="relative h-40 overflow-hidden">
+                <div className="relative h-52 overflow-hidden">
                   <img src={service.image} alt={service.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                 </div>
                 <div className="space-y-2 p-5">
@@ -154,7 +173,7 @@ export default async function HomePage() {
                   <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">
                     <div className="relative h-52 overflow-hidden">
                       <img
-                        src={project.hero_image || "/img/napolje1.webp"}
+                        src={project.hero_image || "/oldsite/p9.jpg"}
                         alt={project.title}
                         className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                       />

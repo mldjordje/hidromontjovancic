@@ -20,7 +20,7 @@ export default async function ProjectsPage() {
         title="Galerija projekata"
         kicker="Realizovani radovi"
         description="Radovi koje smo zavrsili na terenu. Novi projekti se dodaju iz admin panela."
-        background="/img/volvonov2.webp"
+        background="/oldsite/p10.jpg"
         priority
         actions={[{ label: "Posalji upit", href: "/kontakt#forma" }]}
       />
@@ -46,7 +46,7 @@ export default async function ProjectsPage() {
                     <article>
                       <div className="h-52 overflow-hidden">
                         <img
-                          src={project.hero_image || "/img/napolje1.webp"}
+                          src={project.hero_image || "/oldsite/p9.jpg"}
                           alt={project.title}
                           className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                           loading="lazy"

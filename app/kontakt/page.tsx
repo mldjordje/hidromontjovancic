@@ -18,7 +18,7 @@ export default function ContactPage() {
         title="Kontaktirajte nas"
         kicker="Kontakt"
         description="Posaljite upit i odgovoricemo vam u najkracem roku."
-        background="/img/volvonov2.webp"
+        background="/oldsite/p6.jpg"
         priority
         actions={[
           { label: "Pozovi", href: "tel:+381637012339" },

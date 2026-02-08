@@ -29,28 +29,44 @@ export const company = {
 
 export const heroSlides: HeroSlide[] = [
   {
-    title: "Pouzdani vodoinstalaterski radovi",
+    title: "HidroMont Jovancic",
     kicker: "Hidromont Jovancic",
-    description: "Izvodjenje vodovodnih i kanalizacionih instalacija za stambene i poslovne objekte.",
+    description: "Vodovodne i kanalizacione instalacije za stambene, poslovne i infrastrukturne objekte.",
     ctaLabel: "Posalji upit",
     ctaHref: "/kontakt#forma",
-    image: "/img/napolje1.webp",
+    image: "/oldsite/p1.jpg",
   },
   {
-    title: "Kompletna infrastruktura na terenu",
-    kicker: "Instalacije i zemljani radovi",
-    description: "Ugradnja ulicne vodovodne i kanalizacione mreze sa pripremom terena i iskopima.",
+    title: "HidroMont Jovancic",
+    kicker: "Infrastrukturni i terenski radovi",
+    description: "Ugradnja infrastrukture vodovoda i kanalizacije uz pripremu terena i iskope.",
     ctaLabel: "Kontakt",
     ctaHref: "/kontakt#forma",
-    image: "/img/napolje2.webp",
+    image: "/oldsite/p2.jpg",
   },
   {
-    title: "Iskusan tim za zavrsne radove",
+    title: "HidroMont Jovancic",
     kicker: "Sanitarije, PP instalacije i bojeri",
     description: "Montaza sanitarije, protivpozarnih instalacija i centralnih bojlera po projektu.",
     ctaLabel: "Pogledaj usluge",
     ctaHref: "/usluge",
-    image: "/img/rad1.webp",
+    image: "/oldsite/p3.jpg",
+  },
+  {
+    title: "HidroMont Jovancic",
+    kicker: "Iskopi i zemljani radovi",
+    description: "Pruzanje usluga zemljanih radova, rusenja objekata i svih vrsta iskopa.",
+    ctaLabel: "Posalji upit",
+    ctaHref: "/kontakt#forma",
+    image: "/oldsite/p4.jpg",
+  },
+  {
+    title: "HidroMont Jovancic",
+    kicker: "Vodovod i kanalizacija",
+    description: "Pouzdan tim za kompletne instalacije i dugotrajna tehnicka resenja.",
+    ctaLabel: "Kontakt",
+    ctaHref: "/kontakt#forma",
+    image: "/oldsite/p5.jpg",
   },
 ];
 
@@ -58,32 +74,32 @@ export const services: Service[] = [
   {
     title: "Vodovodne i kanalizacione instalacije",
     description: "Kompletna izvedba unutrasnjih instalacija vode i kanalizacije za sve tipove objekata.",
-    image: "/img/rad1.webp",
+    image: "/oldsite/usluge/usluga1.jpg",
   },
   {
     title: "Ulicna vodovodna i kanalizaciona mreza",
     description: "Ugradnja infrastrukture vodovoda i kanalizacije u ulicnoj mrezi.",
-    image: "/img/napolje2.webp",
+    image: "/oldsite/usluge/usluga2.jpg",
   },
   {
     title: "Montaza sanitarije i galanterije",
     description: "Profesionalna Montaza sanitarnih elemenata i pratece opreme.",
-    image: "/img/uterivac.webp",
+    image: "/oldsite/usluge/usluga3.jpg",
   },
   {
     title: "Protivpozarne instalacije",
     description: "Izvodjenje radova na protivpozarnoj instalaciji po tehnickim standardima.",
-    image: "/img/vozila2.webp",
+    image: "/oldsite/usluge/usluga4.jpg",
   },
   {
     title: "Zemljani radovi i iskopi",
     description: "Pruzanje usluga zemljanih radova, rusenja objekata i svih vrsta iskopa.",
-    image: "/img/kamionislika1.webp",
+    image: "/oldsite/usluge/usluga5.jpg",
   },
   {
     title: "Instalacija pumpi i centralnih bojlera",
     description: "Montaza i pustanje u rad pumpi, bojlera i pratece instalacione opreme.",
-    image: "/img/rad2.webp",
+    image: "/oldsite/usluge/usluga6.jpg",
   },
 ];
 

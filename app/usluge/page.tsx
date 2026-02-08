@@ -17,7 +17,7 @@ export default function ServicesPage() {
         title="Usluge"
         kicker="Hidromont Jovancic"
         description="Kompletne instalacione i terenske usluge za stambene, poslovne i infrastrukturne projekte."
-        background="/img/napolje2.webp"
+        background="/oldsite/p7.jpg"
         priority
         actions={[{ label: "Posalji upit", href: "/kontakt#forma" }]}
       />

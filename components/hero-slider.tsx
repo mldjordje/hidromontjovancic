@@ -89,7 +89,7 @@ export default function HeroSlider({ slides }: Props) {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
           transition={{ duration: 1, ease: fadeEase }}
-          className="absolute inset-0 bg-gradient-to-br from-black/90 via-black/75 to-black/55"
+          className="absolute inset-0 bg-black/55"
         />
       </AnimatePresence>
       <motion.div
@@ -103,7 +103,7 @@ export default function HeroSlider({ slides }: Props) {
             "radial-gradient(circle at 15% 25%, rgba(244,161,0,0.28), transparent 35%), radial-gradient(circle at 85% 65%, rgba(255,255,255,0.14), transparent 35%)",
         }}
       />
-      <div className="relative z-10 mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center gap-6 px-4 py-16 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto flex min-h-[75vh] max-w-6xl flex-col items-center justify-center gap-8 px-4 py-16 text-center sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSlide.title}
@@ -111,28 +111,26 @@ export default function HeroSlider({ slides }: Props) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -24 }}
             transition={{ duration: 0.85, ease: fadeEase }}
-            className="space-y-6 rounded-3xl bg-black/45 p-6 shadow-[0_30px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/10 backdrop-blur-sm sm:p-8 lg:p-10"
+            className="space-y-6"
           >
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+            <div className="space-y-4">
+              <span className="inline-flex rounded-full bg-white/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-primary">
                 {activeSlide.kicker}
               </span>
-              <span className="rounded-full bg-white/5 px-3 py-1 text-xs text-gray-200">{label}</span>
-            </div>
-            <div className="max-w-3xl space-y-4">
-              <h1 className="text-3xl font-bold leading-tight text-white drop-shadow-[0_6px_18px_rgba(0,0,0,0.6)] sm:text-4xl lg:text-5xl">
+              <h1 className="text-5xl font-bold leading-none text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.65)] sm:text-7xl">
                 {activeSlide.title}
               </h1>
-              <p className="text-base text-gray-100 drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)] sm:text-lg">
+              <p className="mx-auto max-w-3xl text-base text-gray-100 drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)] sm:text-lg">
                 {activeSlide.description}
               </p>
+              <p className="text-xs uppercase tracking-[0.2em] text-white/80">{label}</p>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               <Link
                 href={activeSlide.ctaHref}
                 className="inline-flex items-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-dark shadow-[0_20px_60px_rgba(244,161,0,0.35)] transition hover:translate-y-[-3px]"
               >
-                {activeSlide.ctaLabel}
+                Zelis da radis sa nama
               </Link>
               <Link
                 href="/usluge"
