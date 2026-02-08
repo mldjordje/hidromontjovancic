@@ -6,7 +6,6 @@ const footerLinks = [
   { href: "/usluge", label: "Usluge" },
   { href: "/projekti", label: "Projekti" },
   { href: "/kontakt", label: "Kontakt" },
-  { href: "/admin", label: "Admin" },
 ];
 
 export default function Footer() {
@@ -16,7 +15,7 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-3">
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <img src="/img/hidromont-logo.png" alt={company.name} className="h-12 w-auto" />
+              <img src="/brand/logo-whitebg.jpg" alt={company.name} className="h-12 w-auto rounded-md" />
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-primary">{company.tagline}</p>
                 <p className="text-lg font-semibold text-white">{company.name}</p>

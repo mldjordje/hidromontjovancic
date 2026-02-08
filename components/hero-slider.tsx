@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
@@ -54,7 +54,7 @@ export default function HeroSlider({ slides }: Props) {
   }, [autoPlay, index, slides]);
 
   const label = useMemo(
-    () => "Betonska baza u Nišu · isporuka betona · pumpe · zemljani radovi",
+    () => "Vodovod i kanalizacija · PP mreza · zemljani radovi · Nis",
     []
   );
 
@@ -163,3 +163,4 @@ export default function HeroSlider({ slides }: Props) {
     </section>
   );
 }
+

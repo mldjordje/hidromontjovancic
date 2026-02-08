@@ -18,7 +18,6 @@ const links: NavLink[] = [
   { href: "/usluge", label: "Usluge" },
   { href: "/projekti", label: "Projekti" },
   { href: "/kontakt", label: "Kontakt" },
-  { href: "/admin", label: "Admin" },
 ];
 
 export default function Navigation() {
@@ -33,10 +32,35 @@ export default function Navigation() {
   }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-black/5 bg-white/80 backdrop-blur">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-40">
+      <div className="hidden border-b border-black/5 bg-dark px-4 py-2 text-xs text-white md:block">
+        <div className="mx-auto flex max-w-6xl items-center justify-between sm:px-2">
+          <a href="tel:+381637012339" className="text-white/90 hover:text-primary">
+            Pozovite nas: +381 63 701 2339
+          </a>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://www.facebook.com/HidroMontJovancic/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-white/80 hover:text-primary"
+            >
+              Facebook
+            </a>
+            <a
+              href="https://www.instagram.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-white/80 hover:text-primary"
+            >
+              Instagram
+            </a>
+          </div>
+        </div>
+      </div>
+      <nav className="mx-auto flex max-w-6xl items-center justify-between gap-3 border-b border-black/5 bg-white/90 px-4 py-3 backdrop-blur sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
-          <img src="/img/hidromont-logo.png" alt={company.name} className="h-11 w-auto" />
+          <img src="/brand/logo-transparent.png" alt={company.name} className="h-11 w-auto" />
           <div className="hidden sm:block">
             <p className="text-xs uppercase tracking-[0.2em] text-primary">{company.tagline}</p>
             <p className="text-sm font-semibold text-dark">{company.name}</p>

@@ -4,6 +4,7 @@ import HeroSlider from "@/components/hero-slider";
 import FloatingCta from "@/components/floating-cta";
 import { ScrollReveal, StaggerReveal } from "@/components/motion/reveal";
 import TiltCard from "@/components/motion/tilt-card";
+import ProcessAndFaq from "@/components/home/process-and-faq";
 import { aboutHighlights, company, heroSlides, services, stats } from "@/content/site";
 import { getProjects } from "@/lib/api";
 import type { Project } from "@/lib/api";
@@ -37,12 +38,12 @@ export default async function HomePage() {
               O nama
             </span>
             <h1 className="text-3xl font-bold leading-tight text-dark sm:text-4xl">
-              Hidromont Jovancic - partner za instalacije i terenske radove
+              HidroMont Jovancic - vodovodne i kanalizacione instalacije
             </h1>
             <p className="text-base text-gray-700">
-              Pruzamo kompletne vodovodne i kanalizacione radove, montazu sanitarije, PP instalacije,
-              kao i zemljane radove i iskope. Radimo na stambenim, poslovnim i infrastrukturnim
-              projektima u Nisu i okolini.
+              Izvodimo vodovodne i kanalizacione instalacije, montazu sanitarije, protivpozarne
+              instalacije, iskope i zemljane radove. Radimo odgovorno, po projektu i u dogovorenim
+              rokovima.
             </p>
             <div className="grid gap-3 sm:grid-cols-2">
               {aboutHighlights.map((item) => (
@@ -124,6 +125,8 @@ export default async function HomePage() {
           </StaggerReveal>
         </div>
       </section>
+
+      <ProcessAndFaq />
 
       <section className="content-section space-y-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-baseline sm:justify-between">
