@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { getProject } from "@/lib/api";
 
 type Props = {
@@ -7,18 +8,33 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props) {
-  const project = await getProject(params.slug);
-  return {
-    title: `${project.title} | Hidromont Jovancic`,
-    description: project.excerpt || "Projekat firme Hidromont Jovancic",
-    alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://hidromontjovancic.rs"}/projekti/${params.slug}`,
-    },
-  };
+  try {
+    const project = await getProject(params.slug);
+    return {
+      title: `${project.title} | Hidromont Jovancic`,
+      description: project.excerpt || "Projekat firme Hidromont Jovancic",
+      alternates: {
+        canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://hidromontjovancic.rs"}/projekti/${params.slug}`,
+      },
+    };
+  } catch {
+    return {
+      title: "Projekat | Hidromont Jovancic",
+      description: "Detalji projekta trenutno nisu dostupni.",
+      alternates: {
+        canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://hidromontjovancic.rs"}/projekti/${params.slug}`,
+      },
+    };
+  }
 }
 
 export default async function ProjectPage({ params }: Props) {
-  const project = await getProject(params.slug);
+  let project;
+  try {
+    project = await getProject(params.slug);
+  } catch {
+    notFound();
+  }
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-6 py-12">
