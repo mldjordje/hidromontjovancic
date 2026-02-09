@@ -34,7 +34,6 @@ async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
       "Content-Type": "application/json",
       ...(init?.headers || {}),
     },
-    next: { revalidate: 300 },
   });
 
   if (!res.ok) {
@@ -45,10 +44,11 @@ async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
 
 export async function getProjects(limit = 20, offset = 0) {
   return fetchJson<{ data: Project[]; meta: { limit: number; offset: number } }>(
-    `/projects?limit=${limit}&offset=${offset}`
+    `/projects?limit=${limit}&offset=${offset}`,
+    { cache: "no-store" }
   );
 }
 
 export async function getProject(slug: string) {
-  return fetchJson<Project>(`/projects/${encodeURIComponent(slug)}`);
+  return fetchJson<Project>(`/projects/${encodeURIComponent(slug)}`, { cache: "no-store" });
 }
