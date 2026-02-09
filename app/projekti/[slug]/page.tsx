@@ -22,8 +22,8 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-6 py-12">
-      <Link href="/projekti" className="text-sm text-gray-600 hover:text-primary">
-        {"<-"} Nazad na projekte
+      <Link href="/projekti/realizovani" className="text-sm text-gray-600 hover:text-primary">
+        {"<-"} Nazad na realizovane projekte
       </Link>
       <div className="space-y-4">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Projekat</p>

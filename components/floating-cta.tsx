@@ -26,7 +26,7 @@ export default function FloatingCta({
       <div className="mx-auto flex max-w-md items-center justify-between gap-2 rounded-full border border-black/10 bg-white/95 p-2 shadow-2xl backdrop-blur">
         <a
           href={`tel:${callDigits ? `+${callDigits}` : phone}`}
-          className="flex-1 rounded-full bg-primary px-4 py-2 text-center text-sm font-semibold text-dark shadow-[0_10px_30px_rgba(244,161,0,0.35)]"
+          className="flex-1 rounded-full bg-primary px-4 py-2 text-center text-sm font-semibold text-white shadow-[0_10px_30px_rgba(15,110,207,0.35)]"
           aria-label={`Pozovi ${phone}`}
         >
           {callLabel}

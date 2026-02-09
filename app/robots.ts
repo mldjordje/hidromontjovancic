@@ -4,10 +4,13 @@ export default function robots(): MetadataRoute.Robots {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hidromontjovancic.rs";
 
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin", "/api/admin", "/oldsite"],
+      },
+    ],
     sitemap: `${siteUrl}/sitemap.xml`,
     host: siteUrl,
   };

@@ -229,8 +229,8 @@ export default function ContactForm({
           type="submit"
           disabled={state === "loading"}
           className={clsx(
-            "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-dark transition",
-            "bg-primary shadow-[0_14px_40px_rgba(244,161,0,0.35)] hover:translate-y-[-2px]",
+            "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white transition",
+            "bg-primary shadow-[0_14px_40px_rgba(15,110,207,0.35)] hover:translate-y-[-2px]",
             state === "loading" && "opacity-70"
           )}
         >

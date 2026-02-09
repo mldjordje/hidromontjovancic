@@ -19,9 +19,9 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const featuredServices = services;
   const projectShortcuts = [
-    { title: "Realizovani projekti", image: "/oldsite/gotov1.jpg", href: "/projekti" },
-    { title: "Projekti u realizaciji", image: "/oldsite/radise3.jpg", href: "/projekti" },
-    { title: "Planirani projekti", image: "/oldsite/uskoro2.jpg", href: "/projekti" },
+    { title: "Realizovani projekti", image: "/oldsite/gotov1.jpg", href: "/projekti/realizovani" },
+    { title: "Projekti u realizaciji", image: "/oldsite/radise3.jpg", href: "/projekti/u-realizaciji" },
+    { title: "Planirani projekti", image: "/oldsite/uskoro2.jpg", href: "/projekti/planirani" },
   ];
   let featuredProjects: Project[] = [];
 
@@ -63,7 +63,7 @@ export default async function HomePage() {
             <div className="flex flex-wrap gap-3 pt-2">
               <Link
                 href="/o-nama"
-                className="inline-flex items-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-dark shadow-[0_12px_40px_rgba(244,161,0,0.35)] transition hover:translate-y-[-2px]"
+                className="inline-flex items-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_40px_rgba(15,110,207,0.35)] transition hover:translate-y-[-2px]"
               >
                 Vise o nama
               </Link>
@@ -156,7 +156,7 @@ export default async function HomePage() {
             <h2 className="text-3xl font-bold text-dark sm:text-4xl">Nasi realizovani radovi</h2>
           </ScrollReveal>
           <ScrollReveal from="right">
-            <Link href="/projekti" className="inline-flex items-center text-sm font-semibold text-primary">
+            <Link href="/projekti/realizovani" className="inline-flex items-center text-sm font-semibold text-primary">
               Pogledaj sve {"->"}
             </Link>
           </ScrollReveal>
@@ -192,7 +192,7 @@ export default async function HomePage() {
 
       <section className="content-section">
         <div className="relative overflow-hidden rounded-3xl border border-black/5 bg-dark text-white shadow-2xl">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,161,0,0.2),_transparent_40%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(15,110,207,0.2),_transparent_40%)]" />
           <div className="grid gap-8 px-6 py-10 sm:px-10 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="space-y-4">
               <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
@@ -207,7 +207,7 @@ export default async function HomePage() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="tel:+381637012339"
-                  className="inline-flex items-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-dark shadow-[0_12px_40px_rgba(244,161,0,0.4)] transition hover:translate-y-[-2px]"
+                  className="inline-flex items-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_40px_rgba(15,110,207,0.4)] transition hover:translate-y-[-2px]"
                 >
                   Pozovi {company.phone}
                 </Link>

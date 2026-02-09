@@ -15,7 +15,7 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-3">
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <img src="/brand/logo-whitebg.jpg" alt={company.name} className="h-12 w-auto rounded-md" />
+              <img src="/brand/newlogo-withwhitebg.jpg?v=20260210" alt={company.name} className="h-14 w-auto object-contain" />
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-primary">{company.tagline}</p>
                 <p className="text-lg font-semibold text-white">{company.name}</p>

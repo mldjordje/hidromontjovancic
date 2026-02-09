@@ -1,34 +1,14 @@
-const CACHE = "hidromont-v1";
-const OFFLINE_URLS = ["/", "/admin", "/manifest.webmanifest"];
-
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(OFFLINE_URLS)).then(() => self.skipWaiting())
-  );
+  event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches
-      .keys()
-      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))
-      .then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
-
-  const url = new URL(event.request.url);
-  if (url.pathname.startsWith("/api")) return;
-
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE).then((cache) => cache.put(event.request, copy));
-        return response;
-      })
-      .catch(() => caches.match(event.request).then((cached) => cached || caches.match("/admin")))
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.filter((key) => key.startsWith("hidromont-")).map((key) => caches.delete(key)));
+      await self.clients.claim();
+      await self.registration.unregister();
+    })()
   );
 });

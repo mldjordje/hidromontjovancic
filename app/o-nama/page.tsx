@@ -59,7 +59,7 @@ export default function AboutPage() {
           <div className="mt-6">
             <Link
               href="/kontakt#forma"
-              className="inline-flex items-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-dark"
+              className="inline-flex items-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white"
             >
               Posalji upit
             </Link>

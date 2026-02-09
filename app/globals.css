@@ -12,13 +12,42 @@ body {
 }
 
 a {
-  @apply text-primary hover:opacity-80 transition-opacity;
+  @apply transition-opacity;
+  color: inherit;
 }
 
 ::selection {
-  background: rgba(244, 161, 0, 0.2);
+  background: rgba(15, 110, 207, 0.25);
 }
 
 .content-section {
   @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+/* Force brand color override in case legacy template styles are loaded. */
+.text-primary {
+  color: #0f6ecf !important;
+}
+
+.bg-primary {
+  background-color: #0f6ecf !important;
+}
+
+.border-primary {
+  border-color: #0f6ecf !important;
+}
+
+/* Hard header override to block legacy yellow nav styles from old template CSS. */
+header.sticky .text-primary,
+header.sticky .navbar-nav li.current > a,
+header.sticky .navbar-nav li.active > a,
+header.sticky a[class*="text-primary"] {
+  color: #0f6ecf !important;
+}
+
+header.sticky .bg-primary,
+header.sticky .butn.primary,
+header.sticky .button,
+header.sticky a.butn {
+  background-color: #0f6ecf !important;
 }

@@ -60,7 +60,7 @@ export default function PageHero({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 20% 30%, rgba(244,161,0,0.25), transparent 38%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.12), transparent 32%)",
+            "radial-gradient(circle at 20% 30%, rgba(15,110,207,0.25), transparent 38%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.12), transparent 32%)",
         }}
       />
       <div className="relative z-10 mx-auto flex min-h-[320px] max-w-6xl flex-col justify-center gap-4 px-4 py-16 sm:px-6 lg:px-8">
@@ -91,7 +91,7 @@ export default function PageHero({
                   href={action.href}
                   className={clsx(
                     "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition",
-                    "bg-primary text-dark shadow-[0_12px_40px_rgba(244,161,0,0.35)] hover:translate-y-[-2px]"
+                    "bg-primary text-white shadow-[0_12px_40px_rgba(15,110,207,0.35)] hover:translate-y-[-2px]"
                   )}
                 >
                   {action.label}

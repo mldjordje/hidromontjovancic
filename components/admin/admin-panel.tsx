@@ -401,7 +401,7 @@ export default function AdminPanel({
               required
             />
           </label>
-          <button type="submit" disabled={busy} className="w-fit rounded-full bg-primary px-5 py-2 text-sm font-semibold text-dark">
+          <button type="submit" disabled={busy} className="w-fit rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white">
             {busy ? "Prijava..." : "Prijavi se"}
           </button>
         </form>
@@ -414,14 +414,14 @@ export default function AdminPanel({
               <>
                 <button
                   type="button"
-                  className={`rounded-full px-4 py-2 text-sm font-semibold ${section === "projects" ? "bg-primary text-dark" : "bg-white border border-black/10"}`}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold ${section === "projects" ? "bg-primary text-white" : "bg-white border border-black/10"}`}
                   onClick={() => setSection("projects")}
                 >
                   Projekti
                 </button>
                 <button
                   type="button"
-                  className={`rounded-full px-4 py-2 text-sm font-semibold ${section === "orders" ? "bg-primary text-dark" : "bg-white border border-black/10"}`}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold ${section === "orders" ? "bg-primary text-white" : "bg-white border border-black/10"}`}
                   onClick={() => setSection("orders")}
                 >
                   Upiti
@@ -495,7 +495,7 @@ export default function AdminPanel({
                   />
                 </label>
 
-                <button type="submit" disabled={busy} className="w-fit rounded-full bg-primary px-5 py-2 text-sm font-semibold text-dark">
+                <button type="submit" disabled={busy} className="w-fit rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white">
                   {busy ? "Cuvanje..." : "Dodaj projekat"}
                 </button>
               </form>
@@ -589,7 +589,7 @@ export default function AdminPanel({
                         <button
                           type="button"
                           onClick={() => void handleSaveProject(project.id)}
-                          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-dark"
+                          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
                           disabled={busy}
                         >
                           Sacuvaj
@@ -652,7 +652,7 @@ export default function AdminPanel({
                             onClick={() => void handleOrderStatus(order, status.value)}
                             disabled={ordersLoading}
                             className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                              order.status === status.value ? "bg-primary text-dark" : "border border-black/10 bg-white"
+                              order.status === status.value ? "bg-primary text-white" : "border border-black/10 bg-white"
                             }`}
                           >
                             {status.label}
