@@ -6,6 +6,7 @@ export type Project = {
   body?: string;
   hero_image?: string | null;
   gallery?: { id?: number; src: string; alt?: string | null; sort_order?: number }[];
+  tags?: Record<string, unknown> | string[] | null;
   published_at?: string | null;
   created_at?: string | null;
   updated_at?: string | null;

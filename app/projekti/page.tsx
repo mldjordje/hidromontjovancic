@@ -4,6 +4,7 @@ import { ScrollReveal, StaggerReveal } from "@/components/motion/reveal";
 import TiltCard from "@/components/motion/tilt-card";
 import { getProjects } from "@/lib/api";
 import type { Project } from "@/lib/api";
+import { filterProjectsByPhase } from "@/lib/project-phase";
 
 export default async function ProjectsPage() {
   let projects: Project[] = [];
@@ -13,6 +14,8 @@ export default async function ProjectsPage() {
   } catch {
     projects = [];
   }
+
+  const realizedProjects = filterProjectsByPhase(projects, "realizovani");
 
   const projectGroups = [
     {
@@ -89,13 +92,13 @@ export default async function ProjectsPage() {
           </p>
         </ScrollReveal>
 
-        {projects.length === 0 ? (
+        {realizedProjects.length === 0 ? (
           <ScrollReveal>
-            <p className="text-sm text-gray-600">Trenutno nema objavljenih projekata.</p>
+            <p className="text-sm text-gray-600">Trenutno nema realizovanih projekata.</p>
           </ScrollReveal>
         ) : (
           <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" stagger={0.08}>
-            {projects.slice(0, 6).map((project) => (
+            {realizedProjects.slice(0, 6).map((project) => (
               <ScrollReveal key={project.id} from="up" className="h-full">
                 <Link href={`/projekti/${project.slug}`} className="group block h-full">
                   <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md transition">

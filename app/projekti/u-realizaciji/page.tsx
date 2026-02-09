@@ -3,6 +3,9 @@ import Link from "next/link";
 import PageHero from "@/components/page-hero";
 import { ScrollReveal, StaggerReveal } from "@/components/motion/reveal";
 import TiltCard from "@/components/motion/tilt-card";
+import { getProjects } from "@/lib/api";
+import type { Project } from "@/lib/api";
+import { filterProjectsByPhase } from "@/lib/project-phase";
 
 export const metadata: Metadata = {
   title: "Projekti u realizaciji",
@@ -10,25 +13,17 @@ export const metadata: Metadata = {
   alternates: { canonical: "/projekti/u-realizaciji" },
 };
 
-const activeProjects = [
-  {
-    title: "Stambeni objekat - instalacije u toku",
-    image: "/oldsite/radise3.jpg",
-    excerpt: "Radovi na vodovodnoj i kanalizacionoj mrezi su u aktivnoj fazi izvodjenja.",
-  },
-  {
-    title: "Terenski infrastrukturni radovi",
-    image: "/oldsite/p4.jpg",
-    excerpt: "U toku je priprema terena i izvodjenje trase za instalacionu mrezu.",
-  },
-  {
-    title: "Unutrasnje instalacije poslovnog objekta",
-    image: "/oldsite/p8.jpg",
-    excerpt: "Montaza sanitarija i prikljucci napreduju po planu dinamike radova.",
-  },
-];
+export default async function InProgressProjectsPage() {
+  let projects: Project[] = [];
+  try {
+    const response = await getProjects(60, 0);
+    projects = response.data || [];
+  } catch {
+    projects = [];
+  }
 
-export default function InProgressProjectsPage() {
+  const inProgress = filterProjectsByPhase(projects, "u_realizaciji");
+
   return (
     <div className="space-y-16 sm:space-y-24">
       <PageHero
@@ -52,28 +47,37 @@ export default function InProgressProjectsPage() {
           </ScrollReveal>
         </div>
 
-        <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" stagger={0.08}>
-          {activeProjects.map((project) => (
-            <ScrollReveal key={project.title} from="up" className="h-full">
-              <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">
-                <article>
-                  <div className="h-52 overflow-hidden">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="space-y-2 p-5">
-                    <h3 className="text-lg font-semibold text-dark">{project.title}</h3>
-                    <p className="text-sm text-gray-600">{project.excerpt}</p>
-                  </div>
-                </article>
-              </TiltCard>
-            </ScrollReveal>
-          ))}
-        </StaggerReveal>
+        {inProgress.length === 0 ? (
+          <ScrollReveal>
+            <p className="text-sm text-gray-600">Trenutno nema projekata u realizaciji.</p>
+          </ScrollReveal>
+        ) : (
+          <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" stagger={0.08}>
+            {inProgress.map((project) => (
+              <ScrollReveal key={project.id} from="up" className="h-full">
+                <Link href={`/projekti/${project.slug}`} className="group block h-full">
+                  <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">
+                    <article>
+                      <div className="h-52 overflow-hidden">
+                        <img
+                          src={project.hero_image || "/oldsite/radise3.jpg"}
+                          alt={project.title}
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="space-y-1 p-5">
+                        <h3 className="text-lg font-semibold text-dark">{project.title}</h3>
+                        {project.excerpt && <p className="text-sm text-gray-600">{project.excerpt}</p>}
+                        <p className="pt-1 text-sm font-semibold text-primary">Pogledaj projekat {"->"}</p>
+                      </div>
+                    </article>
+                  </TiltCard>
+                </Link>
+              </ScrollReveal>
+            ))}
+          </StaggerReveal>
+        )}
       </section>
     </div>
   );

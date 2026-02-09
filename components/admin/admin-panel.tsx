@@ -22,6 +22,7 @@ import {
 
 type Section = "projects" | "orders";
 type ViewState = "loading" | "login" | "ready";
+type ProjectPhase = "realizovani" | "u_realizaciji" | "planirani";
 
 type AdminPanelProps = {
   defaultSection?: Section;
@@ -32,6 +33,43 @@ const projectStatusOptions = [
   { value: "draft", label: "Draft" },
   { value: "published", label: "Objavljeno" },
 ];
+
+const projectPhaseOptions: { value: ProjectPhase; label: string }[] = [
+  { value: "realizovani", label: "Realizovani projekti" },
+  { value: "u_realizaciji", label: "Projekti u realizaciji" },
+  { value: "planirani", label: "Planirani projekti" },
+];
+
+function normalizeTags(input: Project["tags"]): Record<string, unknown> {
+  if (input && typeof input === "object" && !Array.isArray(input)) {
+    return { ...(input as Record<string, unknown>) };
+  }
+  if (Array.isArray(input)) {
+    return { values: input };
+  }
+  return {};
+}
+
+function getProjectPhase(tags: Project["tags"]): ProjectPhase {
+  const fallback: ProjectPhase = "realizovani";
+  if (!tags) return fallback;
+  if (Array.isArray(tags)) return fallback;
+  const value = (tags as Record<string, unknown>).phase;
+  if (
+    value === "realizovani" ||
+    value === "u_realizaciji" ||
+    value === "planirani"
+  ) {
+    return value;
+  }
+  return fallback;
+}
+
+function tagsWithPhase(tags: Project["tags"], phase: ProjectPhase): Record<string, unknown> {
+  const next = normalizeTags(tags);
+  next.phase = phase;
+  return next;
+}
 
 const orderStatusOptions: { value: Order["status"]; label: string }[] = [
   { value: "new", label: "Nova" },
@@ -65,6 +103,7 @@ export default function AdminPanel({
     excerpt: "",
     body: "",
     status: "draft",
+    phase: "realizovani" as ProjectPhase,
   });
   const [newHero, setNewHero] = useState<File | null>(null);
   const [newGallery, setNewGallery] = useState<File[]>([]);
@@ -208,6 +247,7 @@ export default function AdminPanel({
         excerpt: newProject.excerpt,
         body: newProject.body,
         status: newProject.status,
+        tags: tagsWithPhase(null, newProject.phase),
       });
 
       if (newHero) {
@@ -218,7 +258,14 @@ export default function AdminPanel({
         await uploadGalleryImage(created.id, file);
       }
 
-      setNewProject({ title: "", slug: "", excerpt: "", body: "", status: "draft" });
+      setNewProject({
+        title: "",
+        slug: "",
+        excerpt: "",
+        body: "",
+        status: "draft",
+        phase: "realizovani",
+      });
       setNewHero(null);
       setNewGallery([]);
 
@@ -286,6 +333,20 @@ export default function AdminPanel({
         [field]: value,
       },
     }));
+  }
+
+  function changeProjectPhaseDraft(id: number, phase: ProjectPhase) {
+    setProjectDrafts((prev) => {
+      const base = projectDetails[id] || projects.find((item) => item.id === id);
+      const currentTags = (prev[id]?.tags as Project["tags"]) ?? base?.tags ?? null;
+      return {
+        ...prev,
+        [id]: {
+          ...prev[id],
+          tags: tagsWithPhase(currentTags, phase),
+        },
+      };
+    });
   }
 
   async function handleProjectHeroUpload(id: number, files: FileList | null) {
@@ -479,6 +540,20 @@ export default function AdminPanel({
                   ))}
                 </select>
 
+                <select
+                  value={newProject.phase}
+                  onChange={(e) =>
+                    setNewProject((prev) => ({ ...prev, phase: e.target.value as ProjectPhase }))
+                  }
+                  className="w-fit rounded-lg border border-black/10 px-3 py-2"
+                >
+                  {projectPhaseOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+
                 <label className="text-sm font-semibold text-gray-700">
                   Hero slika
                   <input type="file" accept="image/*" onChange={(e) => setNewHero(e.target.files?.[0] || null)} className="mt-1 block w-full text-sm" />
@@ -493,6 +568,9 @@ export default function AdminPanel({
                     onChange={(e) => setNewGallery(Array.from(e.target.files || []))}
                     className="mt-1 block w-full text-sm"
                   />
+                  <span className="mt-1 block text-xs font-normal text-gray-500">
+                    Mozes izabrati jednu ili vise slika.
+                  </span>
                 </label>
 
                 <button type="submit" disabled={busy} className="w-fit rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white">
@@ -504,10 +582,16 @@ export default function AdminPanel({
                 {mergedProjects.map((project) => {
                   const value = projectDrafts[project.id] || {};
                   const live = { ...project, ...value };
+                  const phase = getProjectPhase(live.tags);
 
                   return (
                     <article key={project.id} className="grid gap-3 rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
-                      <h4 className="text-lg font-semibold text-dark">{project.title}</h4>
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <h4 className="text-lg font-semibold text-dark">{project.title}</h4>
+                        <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                          {projectPhaseOptions.find((option) => option.value === phase)?.label}
+                        </span>
+                      </div>
 
                       <input
                         value={String(live.title || "")}
@@ -540,6 +624,17 @@ export default function AdminPanel({
                           </option>
                         ))}
                       </select>
+                      <select
+                        value={phase}
+                        onChange={(e) => changeProjectPhaseDraft(project.id, e.target.value as ProjectPhase)}
+                        className="w-fit rounded-lg border border-black/10 px-3 py-2"
+                      >
+                        {projectPhaseOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
 
                       {live.hero_image && (
                         <img src={live.hero_image} alt={live.title || "Project hero"} className="h-44 w-full rounded-xl object-cover" />
@@ -566,6 +661,9 @@ export default function AdminPanel({
                           disabled={uploadingProject === project.id}
                           className="mt-1 block w-full text-sm"
                         />
+                        <span className="mt-1 block text-xs font-normal text-gray-500">
+                          Mozes izabrati jednu ili vise slika.
+                        </span>
                       </label>
 
                       {projectDetails[project.id]?.gallery && projectDetails[project.id]?.gallery?.length ? (
@@ -586,6 +684,16 @@ export default function AdminPanel({
                       ) : null}
 
                       <div className="flex flex-wrap gap-2">
+                        {live.slug ? (
+                          <a
+                            href={`/projekti/${live.slug}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-dark"
+                          >
+                            Pregled
+                          </a>
+                        ) : null}
                         <button
                           type="button"
                           onClick={() => void handleSaveProject(project.id)}
