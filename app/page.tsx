@@ -43,7 +43,7 @@ export default async function HomePage() {
               O nama
             </span>
             <h1 className="text-3xl font-bold leading-tight text-dark sm:text-4xl">
-              HidroMont Jovancic - vodovodne i kanalizacione instalacije
+              Hidromont Jovancic - vodovodne i kanalizacione instalacije
             </h1>
             <p className="text-base text-gray-700">
               Izvodimo vodovodne i kanalizacione instalacije, montazu sanitarije, protivpozarne

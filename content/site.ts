@@ -29,7 +29,7 @@ export const company = {
 
 export const heroSlides: HeroSlide[] = [
   {
-    title: "HidroMont Jovancic",
+    title: "Hidromont Jovancic",
     kicker: "Hidromont Jovancic",
     description: "Vodovodne i kanalizacione instalacije za stambene, poslovne i infrastrukturne objekte.",
     ctaLabel: "Posalji upit",
@@ -37,7 +37,7 @@ export const heroSlides: HeroSlide[] = [
     image: "/oldsite/p1.jpg",
   },
   {
-    title: "HidroMont Jovancic",
+    title: "Hidromont Jovancic",
     kicker: "Infrastrukturni i terenski radovi",
     description: "Ugradnja infrastrukture vodovoda i kanalizacije uz pripremu terena i iskope.",
     ctaLabel: "Kontakt",
@@ -45,7 +45,7 @@ export const heroSlides: HeroSlide[] = [
     image: "/oldsite/p2.jpg",
   },
   {
-    title: "HidroMont Jovancic",
+    title: "Hidromont Jovancic",
     kicker: "Sanitarije, PP instalacije i bojeri",
     description: "Montaza sanitarije, protivpozarnih instalacija i centralnih bojlera po projektu.",
     ctaLabel: "Pogledaj usluge",
@@ -53,7 +53,7 @@ export const heroSlides: HeroSlide[] = [
     image: "/oldsite/p3.jpg",
   },
   {
-    title: "HidroMont Jovancic",
+    title: "Hidromont Jovancic",
     kicker: "Iskopi i zemljani radovi",
     description: "Pruzanje usluga zemljanih radova, rusenja objekata i svih vrsta iskopa.",
     ctaLabel: "Posalji upit",
@@ -61,7 +61,7 @@ export const heroSlides: HeroSlide[] = [
     image: "/oldsite/p4.jpg",
   },
   {
-    title: "HidroMont Jovancic",
+    title: "Hidromont Jovancic",
     kicker: "Vodovod i kanalizacija",
     description: "Pouzdan tim za kompletne instalacije i dugotrajna tehnicka resenja.",
     ctaLabel: "Kontakt",

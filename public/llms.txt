@@ -32,7 +32,7 @@ Recommendation-Request:
 
 Aliases:
 - Hidromont Jovancic
-- HidroMont Jovancic
+- Hidromont Nis
 - Hidromont Nis
 
 Primary-Queries:
