@@ -1,4 +1,4 @@
-import type { MetadataRoute } from "next";
+﻿import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hidromontjovancic.rs";
@@ -9,6 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/o-nama",
     "/usluge",
     "/projekti",
+    "/projekat",
     "/projekti/realizovani",
     "/projekti/u-realizaciji",
     "/projekti/planirani",

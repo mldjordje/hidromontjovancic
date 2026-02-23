@@ -1,90 +1,13 @@
-﻿import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { company } from "@/content/site";
-import { getProject, getProjectById } from "@/lib/api";
+﻿import { redirect } from "next/navigation";
 
 type Props = {
   params: { slug: string };
   searchParams?: { id?: string };
 };
 
-export async function generateMetadata({ params }: Props) {
-  try {
-    const project = await getProject(params.slug);
-    return {
-      title: `${project.title} | ${company.name}`,
-      description: project.excerpt || `Projekat firme ${company.name}`,
-      alternates: {
-        canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://hidromontjovancic.rs"}/projekti/${params.slug}`,
-      },
-    };
-  } catch {
-    return {
-      title: `Projekat | ${company.name}`,
-      description: "Detalji projekta trenutno nisu dostupni.",
-      alternates: {
-        canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://hidromontjovancic.rs"}/projekti/${params.slug}`,
-      },
-    };
-  }
-}
-
-export default async function ProjectPage({ params, searchParams }: Props) {
-  let project;
-  try {
-    project = await getProject(params.slug);
-  } catch {
-    const idCandidate = Number(searchParams?.id);
-    if (!Number.isInteger(idCandidate) || idCandidate <= 0) {
-      notFound();
-    }
-
-    try {
-      project = await getProjectById(idCandidate);
-    } catch {
-      notFound();
-    }
-  }
-
-  return (
-    <div className="mx-auto max-w-5xl space-y-8 px-6 py-12">
-      <Link href="/projekti/realizovani" className="text-sm text-gray-600 hover:text-primary">
-        {"<-"} Nazad na realizovane projekte
-      </Link>
-      <div className="space-y-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Projekat</p>
-        <h1 className="text-3xl font-bold">{project.title}</h1>
-        {project.excerpt && <p className="text-lg text-gray-700">{project.excerpt}</p>}
-      </div>
-
-      {project.hero_image && (
-        <div className="relative aspect-[16/9] overflow-hidden rounded-xl border border-gray-200 bg-gray-100">
-          <Image src={project.hero_image} alt={project.title} fill className="object-cover" />
-        </div>
-      )}
-
-      {project.body && (
-        <article className="prose prose-lg max-w-none">
-          <div dangerouslySetInnerHTML={{ __html: project.body }} />
-        </article>
-      )}
-
-      {project.gallery && project.gallery.length > 0 && (
-        <div className="space-y-3">
-          <h2 className="text-xl font-semibold">Galerija</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {project.gallery.map((img, idx) => (
-              <div
-                key={`${img.src}-${idx}`}
-                className="relative aspect-[4/3] overflow-hidden rounded-lg border border-gray-200 bg-gray-100"
-              >
-                <Image src={img.src} alt={img.alt || project.title} fill className="object-cover" />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
+export default function LegacyProjectDetailsRedirect({ params, searchParams }: Props) {
+  const slug = encodeURIComponent(params.slug);
+  const id = (searchParams?.id || "").trim();
+  const query = id ? `slug=${slug}&id=${encodeURIComponent(id)}` : `slug=${slug}`;
+  redirect(`/projekat?${query}`);
 }

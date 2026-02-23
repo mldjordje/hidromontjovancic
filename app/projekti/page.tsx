@@ -105,7 +105,7 @@ export default async function ProjectsPage() {
               .slice(0, 6)
               .map((project) => (
                 <ScrollReveal key={project.id} from="up" className="h-full">
-                  <Link href={`/projekti/${project.slug}?id=${project.id}`} className="group block h-full">
+                  <Link href={`/projekat?slug=${project.slug}&id=${project.id}`} className="group block h-full">
                     <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md transition">
                       <article>
                         <div className="h-52 overflow-hidden">
