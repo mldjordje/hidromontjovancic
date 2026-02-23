@@ -1,25 +1,27 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProject } from "@/lib/api";
+import { company } from "@/content/site";
+import { getProject, getProjectById } from "@/lib/api";
 
 type Props = {
   params: { slug: string };
+  searchParams?: { id?: string };
 };
 
 export async function generateMetadata({ params }: Props) {
   try {
     const project = await getProject(params.slug);
     return {
-      title: `${project.title} | HIDRO MONT JOVANČIĆ`,
-      description: project.excerpt || "Projekat firme HIDRO MONT JOVANČIĆ",
+      title: `${project.title} | ${company.name}`,
+      description: project.excerpt || `Projekat firme ${company.name}`,
       alternates: {
         canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://hidromontjovancic.rs"}/projekti/${params.slug}`,
       },
     };
   } catch {
     return {
-      title: "Projekat | HIDRO MONT JOVANČIĆ",
+      title: `Projekat | ${company.name}`,
       description: "Detalji projekta trenutno nisu dostupni.",
       alternates: {
         canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://hidromontjovancic.rs"}/projekti/${params.slug}`,
@@ -28,12 +30,21 @@ export async function generateMetadata({ params }: Props) {
   }
 }
 
-export default async function ProjectPage({ params }: Props) {
+export default async function ProjectPage({ params, searchParams }: Props) {
   let project;
   try {
     project = await getProject(params.slug);
   } catch {
-    notFound();
+    const idCandidate = Number(searchParams?.id);
+    if (!Number.isInteger(idCandidate) || idCandidate <= 0) {
+      notFound();
+    }
+
+    try {
+      project = await getProjectById(idCandidate);
+    } catch {
+      notFound();
+    }
   }
 
   return (

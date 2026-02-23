@@ -1,15 +1,17 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/page-hero";
 import { ScrollReveal, StaggerReveal } from "@/components/motion/reveal";
 import TiltCard from "@/components/motion/tilt-card";
+import { company } from "@/content/site";
 import { getProjects } from "@/lib/api";
 import type { Project } from "@/lib/api";
 import { filterProjectsByPhase } from "@/lib/project-phase";
+import { getGroupCoverImage } from "@/lib/project-group-cover";
 
 export const metadata: Metadata = {
   title: "Realizovani projekti",
-  description: "Pregled zavrsenih projekata firme HIDRO MONT JOVANČIĆ.",
+  description: `Pregled zavrsenih projekata firme ${company.name}.`,
   alternates: { canonical: "/projekti/realizovani" },
 };
 
@@ -22,6 +24,7 @@ export default async function RealizedProjectsPage() {
     projects = [];
   }
   const realized = filterProjectsByPhase(projects, "realizovani");
+  const groupCover = getGroupCoverImage(projects, "realizovani", "/oldsite/gotov1.jpg");
 
   return (
     <div className="space-y-16 sm:space-y-24">
@@ -29,7 +32,7 @@ export default async function RealizedProjectsPage() {
         title="Realizovani projekti"
         kicker="Projekti"
         description="Zavrseni projekti i radovi koje smo uspesno isporucili."
-        background="/oldsite/gotov1.jpg"
+        background={groupCover}
         priority
         actions={[{ label: "Posalji upit", href: "/kontakt#forma" }]}
       />
@@ -56,7 +59,7 @@ export default async function RealizedProjectsPage() {
               .filter((project) => typeof project.slug === "string" && project.slug.trim().length > 0)
               .map((project) => (
               <ScrollReveal key={project.id} from="up" className="h-full">
-                <Link href={`/projekti/${project.slug}`} className="group block h-full">
+                <Link href={`/projekti/${project.slug}?id=${project.id}`} className="group block h-full">
                   <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">
                     <article>
                       <div className="h-52 overflow-hidden">

@@ -52,3 +52,7 @@ export async function getProjects(limit = 20, offset = 0) {
 export async function getProject(slug: string) {
   return fetchJson<Project>(`/projects/${encodeURIComponent(slug)}`, { cache: "no-store" });
 }
+
+export async function getProjectById(id: number | string) {
+  return fetchJson<Project>(`/projects-id/${encodeURIComponent(String(id))}`, { cache: "no-store" });
+}

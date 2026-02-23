@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import HeroSlider from "@/components/hero-slider";
 import FloatingCta from "@/components/floating-cta";
@@ -8,29 +8,46 @@ import ProcessAndFaq from "@/components/home/process-and-faq";
 import { aboutHighlights, company, heroSlides, services, stats } from "@/content/site";
 import { getProjects } from "@/lib/api";
 import type { Project } from "@/lib/api";
+import { getGroupCoverImage } from "@/lib/project-group-cover";
 
 export const metadata: Metadata = {
   title: "Vodovodne i kanalizacione instalacije u Nisu",
-  description:
-    "HIDRO MONT JOVANČIĆ: vodovodne i kanalizacione instalacije, montaza sanitarije, protivpozarna mreza i zemljani radovi.",
+  description: `${company.name}: vodovodne i kanalizacione instalacije, montaza sanitarije, protivpozarna mreza i zemljani radovi.`,
   alternates: { canonical: "/" },
 };
 
 export default async function HomePage() {
   const featuredServices = services;
-  const projectShortcuts = [
-    { title: "Realizovani projekti", image: "/oldsite/gotov1.jpg", href: "/projekti/realizovani" },
-    { title: "Projekti u realizaciji", image: "/oldsite/p2.jpg", href: "/projekti/u-realizaciji" },
-    { title: "Planirani projekti", image: "/oldsite/uskoro2.jpg", href: "/projekti/planirani" },
-  ];
-  let featuredProjects: Project[] = [];
+  let projects: Project[] = [];
 
   try {
-    const response = await getProjects(6, 0);
-    featuredProjects = response.data || [];
+    const response = await getProjects(60, 0);
+    projects = response.data || [];
   } catch {
-    featuredProjects = [];
+    projects = [];
   }
+
+  const projectShortcuts = [
+    {
+      title: "Realizovani projekti",
+      image: getGroupCoverImage(projects, "realizovani", "/oldsite/gotov1.jpg"),
+      href: "/projekti/realizovani",
+    },
+    {
+      title: "Projekti u realizaciji",
+      image: getGroupCoverImage(projects, "u_realizaciji", "/oldsite/p2.jpg"),
+      href: "/projekti/u-realizaciji",
+    },
+    {
+      title: "Planirani projekti",
+      image: getGroupCoverImage(projects, "planirani", "/oldsite/uskoro2.jpg"),
+      href: "/projekti/planirani",
+    },
+  ];
+
+  const featuredProjects = projects
+    .filter((project) => typeof project.slug === "string" && project.slug.trim().length > 0)
+    .slice(0, 6);
 
   return (
     <div className="space-y-16 sm:space-y-24">
@@ -43,7 +60,7 @@ export default async function HomePage() {
               O nama
             </span>
             <h1 className="text-3xl font-bold leading-tight text-dark sm:text-4xl">
-              HIDRO MONT JOVANČIĆ - vodovodne i kanalizacione instalacije
+              {company.name} - vodovodne i kanalizacione instalacije
             </h1>
             <p className="text-base text-gray-700">
               Izvodimo vodovodne i kanalizacione instalacije, montazu sanitarije, protivpozarne
@@ -167,11 +184,9 @@ export default async function HomePage() {
           </ScrollReveal>
         ) : (
           <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {featuredProjects
-              .filter((project) => typeof project.slug === "string" && project.slug.trim().length > 0)
-              .map((project) => (
+            {featuredProjects.map((project) => (
               <ScrollReveal key={project.id} from="up" className="h-full">
-                <Link href={`/projekti/${project.slug}`} className="group block h-full">
+                <Link href={`/projekti/${project.slug}?id=${project.id}`} className="group block h-full">
                   <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">
                     <div className="relative h-52 overflow-hidden">
                       <img

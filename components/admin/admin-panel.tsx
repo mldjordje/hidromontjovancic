@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState } from "react";
 import type { Order, Project } from "@/lib/api";
@@ -76,6 +76,24 @@ function tagsWithPhase(tags: Project["tags"], phase: ProjectPhase): Record<strin
   return next;
 }
 
+function isGroupCover(tags: Project["tags"]): boolean {
+  if (!tags) return false;
+  if (Array.isArray(tags)) {
+    return tags.includes("group_cover");
+  }
+  return (tags as Record<string, unknown>).group_cover === true;
+}
+
+function tagsWithGroupCover(tags: Project["tags"], value: boolean): Record<string, unknown> {
+  const next = normalizeTags(tags);
+  if (value) {
+    next.group_cover = true;
+  } else {
+    delete next.group_cover;
+  }
+  return next;
+}
+
 const orderStatusOptions: { value: Order["status"]; label: string }[] = [
   { value: "new", label: "Nova" },
   { value: "in_progress", label: "U obradi" },
@@ -109,6 +127,7 @@ export default function AdminPanel({
     body: "",
     status: "published",
     phase: "realizovani" as ProjectPhase,
+    groupCover: false,
   });
   const [newHero, setNewHero] = useState<File | null>(null);
   const [newGallery, setNewGallery] = useState<File[]>([]);
@@ -252,7 +271,7 @@ export default function AdminPanel({
         excerpt: newProject.excerpt,
         body: newProject.body,
         status: newProject.status,
-        tags: tagsWithPhase(null, newProject.phase),
+        tags: tagsWithGroupCover(tagsWithPhase(null, newProject.phase), newProject.groupCover),
       });
 
       if (newHero) {
@@ -270,6 +289,7 @@ export default function AdminPanel({
         body: "",
         status: "published",
         phase: "realizovani",
+        groupCover: false,
       });
       setNewHero(null);
       setNewGallery([]);
@@ -355,6 +375,20 @@ export default function AdminPanel({
         [id]: {
           ...prev[id],
           tags: tagsWithPhase(currentTags, phase),
+        },
+      };
+    });
+  }
+
+  function changeProjectGroupCoverDraft(id: number, value: boolean) {
+    setProjectDrafts((prev) => {
+      const base = projectDetails[id] || projects.find((item) => item.id === id);
+      const currentTags = (prev[id]?.tags as Project["tags"]) ?? base?.tags ?? null;
+      return {
+        ...prev,
+        [id]: {
+          ...prev[id],
+          tags: tagsWithGroupCover(currentTags, value),
         },
       };
     });
@@ -564,6 +598,14 @@ export default function AdminPanel({
                     </option>
                   ))}
                 </select>
+                <label className="inline-flex items-center gap-2 text-sm font-semibold text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={newProject.groupCover}
+                    onChange={(e) => setNewProject((prev) => ({ ...prev, groupCover: e.target.checked }))}
+                  />
+                  Koristi hero sliku kao naslovnu za grupu
+                </label>
 
                 <label className="text-sm font-semibold text-gray-700">
                   Hero slika
@@ -594,6 +636,7 @@ export default function AdminPanel({
                   const value = projectDrafts[project.id] || {};
                   const live = { ...project, ...value };
                   const phase = getProjectPhase(live.tags);
+                  const groupCover = isGroupCover(live.tags);
 
                   return (
                     <article key={project.id} className="grid gap-3 rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
@@ -646,6 +689,14 @@ export default function AdminPanel({
                           </option>
                         ))}
                       </select>
+                      <label className="inline-flex items-center gap-2 text-sm font-semibold text-gray-700">
+                        <input
+                          type="checkbox"
+                          checked={groupCover}
+                          onChange={(e) => changeProjectGroupCoverDraft(project.id, e.target.checked)}
+                        />
+                        Koristi hero sliku kao naslovnu za grupu ({phase})
+                      </label>
 
                       {live.hero_image && (
                         <img src={live.hero_image} alt={live.title || "Project hero"} className="h-44 w-full rounded-xl object-cover" />
@@ -697,7 +748,7 @@ export default function AdminPanel({
                       <div className="flex flex-wrap gap-2">
                         {live.slug && live.status === "published" ? (
                           <a
-                            href={`/projekti/${live.slug}`}
+                            href={`/projekti/${live.slug}?id=${project.id}`}
                             target="_blank"
                             rel="noreferrer"
                             className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-dark"

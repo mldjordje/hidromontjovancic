@@ -26,7 +26,7 @@ export default async function ProjectsGrid({ featured = false, limit = 12 }: Pro
       {data.map((project) => (
         <Link
           key={project.id}
-          href={`/projekti/${project.slug}`}
+          href={`/projekti/${project.slug}?id=${project.id}`}
           className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
         >
           <div className="relative aspect-[4/3] bg-gray-100">

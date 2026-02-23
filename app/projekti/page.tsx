@@ -1,10 +1,12 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import PageHero from "@/components/page-hero";
 import { ScrollReveal, StaggerReveal } from "@/components/motion/reveal";
 import TiltCard from "@/components/motion/tilt-card";
+import { company } from "@/content/site";
 import { getProjects } from "@/lib/api";
 import type { Project } from "@/lib/api";
 import { filterProjectsByPhase } from "@/lib/project-phase";
+import { getGroupCoverImage } from "@/lib/project-group-cover";
 
 export default async function ProjectsPage() {
   let projects: Project[] = [];
@@ -21,19 +23,19 @@ export default async function ProjectsPage() {
     {
       title: "Realizovani projekti",
       href: "/projekti/realizovani",
-      image: "/oldsite/gotov1.jpg",
+      image: getGroupCoverImage(projects, "realizovani", "/oldsite/gotov1.jpg"),
       description: "Kompletno zavrseni projekti na kojima smo radili.",
     },
     {
       title: "Projekti u realizaciji",
       href: "/projekti/u-realizaciji",
-      image: "/oldsite/p2.jpg",
+      image: getGroupCoverImage(projects, "u_realizaciji", "/oldsite/p2.jpg"),
       description: "Aktuelni projekti koji su trenutno u toku.",
     },
     {
       title: "Planirani projekti",
       href: "/projekti/planirani",
-      image: "/oldsite/uskoro2.jpg",
+      image: getGroupCoverImage(projects, "planirani", "/oldsite/uskoro2.jpg"),
       description: "Projekti koji su u pripremi za naredni period.",
     },
   ];
@@ -42,7 +44,7 @@ export default async function ProjectsPage() {
     <div className="space-y-16 sm:space-y-24">
       <PageHero
         title="Projekti po grupama"
-        kicker="HIDRO MONT JOVANČIĆ"
+        kicker={company.name}
         description="Pregled projekata kroz tri odvojene kategorije: realizovani, u realizaciji i planirani."
         background="/oldsite/p10.jpg"
         priority
@@ -102,28 +104,28 @@ export default async function ProjectsPage() {
               .filter((project) => typeof project.slug === "string" && project.slug.trim().length > 0)
               .slice(0, 6)
               .map((project) => (
-              <ScrollReveal key={project.id} from="up" className="h-full">
-                <Link href={`/projekti/${project.slug}`} className="group block h-full">
-                  <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md transition">
-                    <article>
-                      <div className="h-52 overflow-hidden">
-                        <img
-                          src={project.hero_image || "/oldsite/p9.jpg"}
-                          alt={project.title}
-                          className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      </div>
-                      <div className="space-y-1 p-5">
-                        <h3 className="text-lg font-semibold text-dark">{project.title}</h3>
-                        {project.excerpt && <p className="text-sm text-gray-600">{project.excerpt}</p>}
-                        <p className="pt-1 text-sm font-semibold text-primary">Pogledaj projekat {"->"}</p>
-                      </div>
-                    </article>
-                  </TiltCard>
-                </Link>
-              </ScrollReveal>
-            ))}
+                <ScrollReveal key={project.id} from="up" className="h-full">
+                  <Link href={`/projekti/${project.slug}?id=${project.id}`} className="group block h-full">
+                    <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md transition">
+                      <article>
+                        <div className="h-52 overflow-hidden">
+                          <img
+                            src={project.hero_image || "/oldsite/p9.jpg"}
+                            alt={project.title}
+                            className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="space-y-1 p-5">
+                          <h3 className="text-lg font-semibold text-dark">{project.title}</h3>
+                          {project.excerpt && <p className="text-sm text-gray-600">{project.excerpt}</p>}
+                          <p className="pt-1 text-sm font-semibold text-primary">Pogledaj projekat {"->"}</p>
+                        </div>
+                      </article>
+                    </TiltCard>
+                  </Link>
+                </ScrollReveal>
+              ))}
           </StaggerReveal>
         )}
       </section>

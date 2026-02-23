@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/page-hero";
 import { ScrollReveal, StaggerReveal } from "@/components/motion/reveal";
@@ -6,6 +6,7 @@ import TiltCard from "@/components/motion/tilt-card";
 import { getProjects } from "@/lib/api";
 import type { Project } from "@/lib/api";
 import { filterProjectsByPhase } from "@/lib/project-phase";
+import { getGroupCoverImage } from "@/lib/project-group-cover";
 
 export const metadata: Metadata = {
   title: "Planirani projekti",
@@ -23,6 +24,7 @@ export default async function PlannedProjectsPage() {
   }
 
   const planned = filterProjectsByPhase(projects, "planirani");
+  const groupCover = getGroupCoverImage(projects, "planirani", "/oldsite/uskoro2.jpg");
 
   return (
     <div className="space-y-16 sm:space-y-24">
@@ -30,7 +32,7 @@ export default async function PlannedProjectsPage() {
         title="Planirani projekti"
         kicker="Projekti"
         description="Projekti koji su trenutno u fazi pripreme i planiranja."
-        background="/oldsite/uskoro2.jpg"
+        background={groupCover}
         priority
         actions={[{ label: "Posalji upit", href: "/kontakt#forma" }]}
       />
@@ -57,7 +59,7 @@ export default async function PlannedProjectsPage() {
               .filter((project) => typeof project.slug === "string" && project.slug.trim().length > 0)
               .map((project) => (
               <ScrollReveal key={project.id} from="up" className="h-full">
-                <Link href={`/projekti/${project.slug}`} className="group block h-full">
+                <Link href={`/projekti/${project.slug}?id=${project.id}`} className="group block h-full">
                   <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">
                     <article>
                       <div className="h-52 overflow-hidden">
