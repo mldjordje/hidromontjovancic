@@ -17,12 +17,12 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://hidromontjovancic.rs"),
   title: {
-    default: "Hidromont Jovancic | Vodovodne i kanalizacione instalacije",
-    template: "%s | Hidromont Jovancic",
+    default: "HIDRO MONT JOVANČIĆ | Vodovodne i kanalizacione instalacije",
+    template: "%s | HIDRO MONT JOVANČIĆ",
   },
   description:
-    "Hidromont Jovancic, Nis - vodovodne i kanalizacione instalacije, montaza sanitarije, protivpozarne instalacije, zemljani radovi i iskopi.",
-  applicationName: "Hidromont Jovancic",
+    "HIDRO MONT JOVANČIĆ, Nis - vodovodne i kanalizacione instalacije, montaza sanitarije, protivpozarne instalacije, zemljani radovi i iskopi.",
+  applicationName: "HIDRO MONT JOVANČIĆ",
   category: "construction",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
@@ -56,8 +56,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sr_RS",
     url: "/",
-    siteName: "Hidromont Jovancic",
-    title: "Hidromont Jovancic | Vodovodne i kanalizacione instalacije",
+    siteName: "HIDRO MONT JOVANČIĆ",
+    title: "HIDRO MONT JOVANČIĆ | Vodovodne i kanalizacione instalacije",
     description:
       "Strucni tim za instalacione i zemljane radove: vodovod, kanalizacija, sanitarije, PP mreza i iskopi.",
     images: [
@@ -65,13 +65,13 @@ export const metadata: Metadata = {
         url: "/oldsite/p1.jpg",
         width: 1200,
         height: 630,
-        alt: "Hidromont Jovancic - vodovodne i kanalizacione instalacije",
+        alt: "HIDRO MONT JOVANČIĆ - vodovodne i kanalizacione instalacije",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hidromont Jovancic | Vodovodne i kanalizacione instalacije",
+    title: "HIDRO MONT JOVANČIĆ | Vodovodne i kanalizacione instalacije",
     description:
       "Vodovodne i kanalizacione instalacije, PP mreza, sanitarije, zemljani radovi i iskopi u Nisu i okolini.",
     images: ["/oldsite/p1.jpg"],
@@ -90,7 +90,7 @@ export default function RootLayout({
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: "Hidromont Jovancic",
+    name: "HIDRO MONT JOVANČIĆ",
     image: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://hidromontjovancic.rs"}/oldsite/p1.jpg`,
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hidromontjovancic.rs",
     telephone: "+381637012339",

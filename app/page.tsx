@@ -12,7 +12,7 @@ import type { Project } from "@/lib/api";
 export const metadata: Metadata = {
   title: "Vodovodne i kanalizacione instalacije u Nisu",
   description:
-    "Hidromont Jovancic: vodovodne i kanalizacione instalacije, montaza sanitarije, protivpozarna mreza i zemljani radovi.",
+    "HIDRO MONT JOVANČIĆ: vodovodne i kanalizacione instalacije, montaza sanitarije, protivpozarna mreza i zemljani radovi.",
   alternates: { canonical: "/" },
 };
 
@@ -20,7 +20,7 @@ export default async function HomePage() {
   const featuredServices = services;
   const projectShortcuts = [
     { title: "Realizovani projekti", image: "/oldsite/gotov1.jpg", href: "/projekti/realizovani" },
-    { title: "Projekti u realizaciji", image: "/oldsite/radise3.jpg", href: "/projekti/u-realizaciji" },
+    { title: "Projekti u realizaciji", image: "/oldsite/p2.jpg", href: "/projekti/u-realizaciji" },
     { title: "Planirani projekti", image: "/oldsite/uskoro2.jpg", href: "/projekti/planirani" },
   ];
   let featuredProjects: Project[] = [];
@@ -43,7 +43,7 @@ export default async function HomePage() {
               O nama
             </span>
             <h1 className="text-3xl font-bold leading-tight text-dark sm:text-4xl">
-              Hidromont Jovancic - vodovodne i kanalizacione instalacije
+              HIDRO MONT JOVANČIĆ - vodovodne i kanalizacione instalacije
             </h1>
             <p className="text-base text-gray-700">
               Izvodimo vodovodne i kanalizacione instalacije, montazu sanitarije, protivpozarne
@@ -167,7 +167,9 @@ export default async function HomePage() {
           </ScrollReveal>
         ) : (
           <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {featuredProjects.map((project) => (
+            {featuredProjects
+              .filter((project) => typeof project.slug === "string" && project.slug.trim().length > 0)
+              .map((project) => (
               <ScrollReveal key={project.id} from="up" className="h-full">
                 <Link href={`/projekti/${project.slug}`} className="group block h-full">
                   <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">

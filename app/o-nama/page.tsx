@@ -6,7 +6,7 @@ import { aboutHighlights, company } from "@/content/site";
 export const metadata: Metadata = {
   title: "O nama",
   description:
-    "Hidromont Jovancic - tim za vodovodne i kanalizacione instalacije, sanitarije, PP instalacije i zemljane radove.",
+    "HIDRO MONT JOVANČIĆ - tim za vodovodne i kanalizacione instalacije, sanitarije, PP instalacije i zemljane radove.",
   alternates: { canonical: "/o-nama" },
 };
 
@@ -14,7 +14,7 @@ export default function AboutPage() {
   return (
     <div className="space-y-16 sm:space-y-24">
       <PageHero
-        title="O kompaniji Hidromont Jovancic"
+        title="O kompaniji HIDRO MONT JOVANČIĆ"
         kicker="O nama"
         description="Radimo precizno, odgovorno i u skladu sa projektom - od pripreme terena do zavrsne montaze."
         background="/oldsite/p6.jpg"
@@ -26,7 +26,7 @@ export default function AboutPage() {
         <div className="space-y-4">
           <h2 className="text-3xl font-bold text-dark">Ko smo mi</h2>
           <p className="text-gray-700">
-            Hidromont Jovancic je firma iz Nisa specijalizovana za vodovodne i kanalizacione
+            HIDRO MONT JOVANČIĆ je firma iz Nisa specijalizovana za vodovodne i kanalizacione
             instalacije, ulicnu mrezu, montazu sanitarija, protivpozarne instalacije i zemljane
             radove.
           </p>

@@ -19,25 +19,25 @@ export type Stat = {
 };
 
 export const company = {
-  name: "Hidromont Jovancic",
+  name: "HIDRO MONT JOVANČIĆ",
   tagline: "Vodovodne i kanalizacione instalacije",
   phone: "+381 63 701 2339",
   email: "hidromontjovancic@gmail.com",
   address: "Moravske divizije 36, Nis 18000",
-  workingHours: "Pon - Sub, 08:00 - 18:00",
+  workingHours: "Pon - Sub, 07:00 - 17:00",
 };
 
 export const heroSlides: HeroSlide[] = [
   {
-    title: "Hidromont Jovancic",
-    kicker: "Hidromont Jovancic",
+    title: "HIDRO MONT JOVANČIĆ",
+    kicker: "HIDRO MONT JOVANČIĆ",
     description: "Vodovodne i kanalizacione instalacije za stambene, poslovne i infrastrukturne objekte.",
     ctaLabel: "Posalji upit",
     ctaHref: "/kontakt#forma",
     image: "/oldsite/p1.jpg",
   },
   {
-    title: "Hidromont Jovancic",
+    title: "HIDRO MONT JOVANČIĆ",
     kicker: "Infrastrukturni i terenski radovi",
     description: "Ugradnja infrastrukture vodovoda i kanalizacije uz pripremu terena i iskope.",
     ctaLabel: "Kontakt",
@@ -45,7 +45,7 @@ export const heroSlides: HeroSlide[] = [
     image: "/oldsite/p2.jpg",
   },
   {
-    title: "Hidromont Jovancic",
+    title: "HIDRO MONT JOVANČIĆ",
     kicker: "Sanitarije, PP instalacije i bojeri",
     description: "Montaza sanitarije, protivpozarnih instalacija i centralnih bojlera po projektu.",
     ctaLabel: "Pogledaj usluge",
@@ -53,7 +53,7 @@ export const heroSlides: HeroSlide[] = [
     image: "/oldsite/p3.jpg",
   },
   {
-    title: "Hidromont Jovancic",
+    title: "HIDRO MONT JOVANČIĆ",
     kicker: "Iskopi i zemljani radovi",
     description: "Pruzanje usluga zemljanih radova, rusenja objekata i svih vrsta iskopa.",
     ctaLabel: "Posalji upit",
@@ -61,7 +61,7 @@ export const heroSlides: HeroSlide[] = [
     image: "/oldsite/p4.jpg",
   },
   {
-    title: "Hidromont Jovancic",
+    title: "HIDRO MONT JOVANČIĆ",
     kicker: "Vodovod i kanalizacija",
     description: "Pouzdan tim za kompletne instalacije i dugotrajna tehnicka resenja.",
     ctaLabel: "Kontakt",

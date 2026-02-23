@@ -53,7 +53,12 @@ function normalizeTags(input: Project["tags"]): Record<string, unknown> {
 function getProjectPhase(tags: Project["tags"]): ProjectPhase {
   const fallback: ProjectPhase = "realizovani";
   if (!tags) return fallback;
-  if (Array.isArray(tags)) return fallback;
+  if (Array.isArray(tags)) {
+    if (tags.includes("u_realizaciji")) return "u_realizaciji";
+    if (tags.includes("planirani")) return "planirani";
+    if (tags.includes("realizovani")) return "realizovani";
+    return fallback;
+  }
   const value = (tags as Record<string, unknown>).phase;
   if (
     value === "realizovani" ||
@@ -102,7 +107,7 @@ export default function AdminPanel({
     slug: "",
     excerpt: "",
     body: "",
-    status: "draft",
+    status: "published",
     phase: "realizovani" as ProjectPhase,
   });
   const [newHero, setNewHero] = useState<File | null>(null);
@@ -263,7 +268,7 @@ export default function AdminPanel({
         slug: "",
         excerpt: "",
         body: "",
-        status: "draft",
+        status: "published",
         phase: "realizovani",
       });
       setNewHero(null);
@@ -303,8 +308,14 @@ export default function AdminPanel({
       await refreshProjectDetail(id);
       await refreshProjects();
       setMessage("Projekat je sacuvan.");
-    } catch {
-      setMessage("Neuspesno cuvanje projekta.");
+    } catch (error) {
+      if (error instanceof ApiError) {
+        const bodyError =
+          typeof error.body === "string" ? error.body : (error.body as { error?: string } | undefined)?.error;
+        setMessage(bodyError ? `Greska: ${bodyError}` : "Neuspesno cuvanje projekta.");
+      } else {
+        setMessage("Neuspesno cuvanje projekta.");
+      }
     } finally {
       setBusy(false);
     }
@@ -684,7 +695,7 @@ export default function AdminPanel({
                       ) : null}
 
                       <div className="flex flex-wrap gap-2">
-                        {live.slug ? (
+                        {live.slug && live.status === "published" ? (
                           <a
                             href={`/projekti/${live.slug}`}
                             target="_blank"

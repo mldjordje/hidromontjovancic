@@ -22,7 +22,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="max-w-md text-sm text-gray-300">
-              Hidromont Jovancic izvodi vodovodne i kanalizacione instalacije, ulicnu infrastrukturu,
+              HIDRO MONT JOVANČIĆ izvodi vodovodne i kanalizacione instalacije, ulicnu infrastrukturu,
               montazu sanitarije, protivpozarne instalacije, zemljane radove i iskope.
             </p>
           </div>
@@ -71,7 +71,7 @@ export default function Footer() {
           <p className="text-xs text-gray-400">
             {new Date().getFullYear()} {company.name}. Sva prava zadrzana.
           </p>
-          <div className="text-xs text-gray-500">Izradio Hidromont Jovancic tim</div>
+          <div className="text-xs text-gray-500">Izradio HIDRO MONT JOVANČIĆ tim</div>
         </div>
       </div>
     </footer>

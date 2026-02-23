@@ -53,7 +53,9 @@ export default async function PlannedProjectsPage() {
           </ScrollReveal>
         ) : (
           <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" stagger={0.08}>
-            {planned.map((project) => (
+            {planned
+              .filter((project) => typeof project.slug === "string" && project.slug.trim().length > 0)
+              .map((project) => (
               <ScrollReveal key={project.id} from="up" className="h-full">
                 <Link href={`/projekti/${project.slug}`} className="group block h-full">
                   <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">

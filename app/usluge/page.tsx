@@ -6,7 +6,7 @@ import { services } from "@/content/site";
 export const metadata: Metadata = {
   title: "Usluge",
   description:
-    "Pregled usluga firme Hidromont Jovancic: vodovod, kanalizacija, sanitarije, PP instalacije i zemljani radovi.",
+    "Pregled usluga firme HIDRO MONT JOVANČIĆ: vodovod, kanalizacija, sanitarije, PP instalacije i zemljani radovi.",
   alternates: { canonical: "/usluge" },
 };
 
@@ -15,7 +15,7 @@ export default function ServicesPage() {
     <div className="space-y-16 sm:space-y-24">
       <PageHero
         title="Usluge"
-        kicker="Hidromont Jovancic"
+        kicker="HIDRO MONT JOVANČIĆ"
         description="Kompletne instalacione i terenske usluge za stambene, poslovne i infrastrukturne projekte."
         background="/oldsite/p7.jpg"
         priority

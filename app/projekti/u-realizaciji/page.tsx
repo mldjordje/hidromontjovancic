@@ -30,7 +30,7 @@ export default async function InProgressProjectsPage() {
         title="Projekti u realizaciji"
         kicker="Projekti"
         description="Objekti i lokacije na kojima tim trenutno radi."
-        background="/oldsite/radise3.jpg"
+        background="/oldsite/p2.jpg"
         priority
         actions={[{ label: "Posalji upit", href: "/kontakt#forma" }]}
       />
@@ -53,14 +53,16 @@ export default async function InProgressProjectsPage() {
           </ScrollReveal>
         ) : (
           <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" stagger={0.08}>
-            {inProgress.map((project) => (
+            {inProgress
+              .filter((project) => typeof project.slug === "string" && project.slug.trim().length > 0)
+              .map((project) => (
               <ScrollReveal key={project.id} from="up" className="h-full">
                 <Link href={`/projekti/${project.slug}`} className="group block h-full">
                   <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">
                     <article>
                       <div className="h-52 overflow-hidden">
                         <img
-                          src={project.hero_image || "/oldsite/radise3.jpg"}
+                          src={project.hero_image || "/oldsite/p2.jpg"}
                           alt={project.title}
                           className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                           loading="lazy"

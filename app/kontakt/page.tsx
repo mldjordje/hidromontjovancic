@@ -7,7 +7,7 @@ import { company } from "@/content/site";
 export const metadata: Metadata = {
   title: "Kontakt",
   description:
-    "Kontaktirajte Hidromont Jovancic za ponudu i informacije o instalacionim i zemljanim radovima.",
+    "Kontaktirajte HIDRO MONT JOVANČIĆ za ponudu i informacije o instalacionim i zemljanim radovima.",
   alternates: { canonical: "/kontakt" },
 };
 
@@ -57,7 +57,7 @@ export default function ContactPage() {
 
             <div className="overflow-hidden rounded-3xl border border-black/5 shadow-xl">
               <iframe
-                title="Mapa Hidromont Jovancic"
+                title="Mapa HIDRO MONT JOVANČIĆ"
                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11526.043922801283!2d21.8887915!3d43.3446012!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4755b79e59040e57%3A0xb7d73e47c8b7c9f4!2sHIDRO%20MONT%20JOVAN%C4%8CI%C4%86!5e0!3m2!1sen!2srs!4v1682497102779!5m2!1sen!2srs"
                 className="h-[360px] w-full border-0"
                 loading="lazy"

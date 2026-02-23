@@ -27,7 +27,7 @@ export default async function ProjectsPage() {
     {
       title: "Projekti u realizaciji",
       href: "/projekti/u-realizaciji",
-      image: "/oldsite/radise3.jpg",
+      image: "/oldsite/p2.jpg",
       description: "Aktuelni projekti koji su trenutno u toku.",
     },
     {
@@ -42,7 +42,7 @@ export default async function ProjectsPage() {
     <div className="space-y-16 sm:space-y-24">
       <PageHero
         title="Projekti po grupama"
-        kicker="Hidromont Jovancic"
+        kicker="HIDRO MONT JOVANČIĆ"
         description="Pregled projekata kroz tri odvojene kategorije: realizovani, u realizaciji i planirani."
         background="/oldsite/p10.jpg"
         priority
@@ -98,7 +98,10 @@ export default async function ProjectsPage() {
           </ScrollReveal>
         ) : (
           <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" stagger={0.08}>
-            {realizedProjects.slice(0, 6).map((project) => (
+            {realizedProjects
+              .filter((project) => typeof project.slug === "string" && project.slug.trim().length > 0)
+              .slice(0, 6)
+              .map((project) => (
               <ScrollReveal key={project.id} from="up" className="h-full">
                 <Link href={`/projekti/${project.slug}`} className="group block h-full">
                   <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md transition">

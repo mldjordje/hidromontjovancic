@@ -2,11 +2,23 @@ import type { Project } from "./api";
 
 export type ProjectPhase = "realizovani" | "u_realizaciji" | "planirani";
 
+function isKnownPhase(value: unknown): value is ProjectPhase {
+  return value === "u_realizaciji" || value === "planirani" || value === "realizovani";
+}
+
 export function getProjectPhase(project: Pick<Project, "tags">): ProjectPhase {
   const tags = project.tags;
-  if (!tags || Array.isArray(tags)) return "realizovani";
+  if (!tags) return "realizovani";
+
+  if (Array.isArray(tags)) {
+    for (const tag of tags) {
+      if (isKnownPhase(tag)) return tag;
+    }
+    return "realizovani";
+  }
+
   const phase = (tags as Record<string, unknown>).phase;
-  if (phase === "u_realizaciji" || phase === "planirani" || phase === "realizovani") {
+  if (isKnownPhase(phase)) {
     return phase;
   }
   return "realizovani";

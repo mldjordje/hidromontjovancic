@@ -9,7 +9,7 @@ import { filterProjectsByPhase } from "@/lib/project-phase";
 
 export const metadata: Metadata = {
   title: "Realizovani projekti",
-  description: "Pregled zavrsenih projekata firme Hidromont Jovancic.",
+  description: "Pregled zavrsenih projekata firme HIDRO MONT JOVANČIĆ.",
   alternates: { canonical: "/projekti/realizovani" },
 };
 
@@ -52,7 +52,9 @@ export default async function RealizedProjectsPage() {
           </ScrollReveal>
         ) : (
           <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" stagger={0.08}>
-            {realized.map((project) => (
+            {realized
+              .filter((project) => typeof project.slug === "string" && project.slug.trim().length > 0)
+              .map((project) => (
               <ScrollReveal key={project.id} from="up" className="h-full">
                 <Link href={`/projekti/${project.slug}`} className="group block h-full">
                   <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">

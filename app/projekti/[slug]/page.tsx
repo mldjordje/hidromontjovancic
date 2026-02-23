@@ -11,15 +11,15 @@ export async function generateMetadata({ params }: Props) {
   try {
     const project = await getProject(params.slug);
     return {
-      title: `${project.title} | Hidromont Jovancic`,
-      description: project.excerpt || "Projekat firme Hidromont Jovancic",
+      title: `${project.title} | HIDRO MONT JOVANČIĆ`,
+      description: project.excerpt || "Projekat firme HIDRO MONT JOVANČIĆ",
       alternates: {
         canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://hidromontjovancic.rs"}/projekti/${params.slug}`,
       },
     };
   } catch {
     return {
-      title: "Projekat | Hidromont Jovancic",
+      title: "Projekat | HIDRO MONT JOVANČIĆ",
       description: "Detalji projekta trenutno nisu dostupni.",
       alternates: {
         canonical: `${process.env.NEXT_PUBLIC_SITE_URL || "https://hidromontjovancic.rs"}/projekti/${params.slug}`,
