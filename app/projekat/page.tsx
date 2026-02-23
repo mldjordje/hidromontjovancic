@@ -4,10 +4,15 @@ import { company } from "@/content/site";
 import { getProject, getProjectById, getProjects, type Project } from "@/lib/api";
 
 type Props = {
-  searchParams?: {
-    slug?: string;
-    id?: string;
-  };
+  searchParams?:
+    | {
+        slug?: string;
+        id?: string;
+      }
+    | Promise<{
+        slug?: string;
+        id?: string;
+      }>;
 };
 
 async function resolveProject(slug?: string, id?: number): Promise<Project | null> {
@@ -45,8 +50,9 @@ async function resolveProject(slug?: string, id?: number): Promise<Project | nul
 }
 
 export default async function ProjectDetailsPage({ searchParams }: Props) {
-  const slug = (searchParams?.slug || "").trim() || undefined;
-  const id = Number(searchParams?.id);
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const slug = (resolvedSearchParams?.slug || "").trim() || undefined;
+  const id = Number(resolvedSearchParams?.id);
   const validId = Number.isInteger(id) && id > 0 ? id : undefined;
   const project = await resolveProject(slug, validId);
 
@@ -112,4 +118,3 @@ export default async function ProjectDetailsPage({ searchParams }: Props) {
     </div>
   );
 }
-
