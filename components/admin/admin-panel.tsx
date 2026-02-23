@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Order, Project } from "@/lib/api";
 import { getProjects } from "@/lib/api";
 import {
@@ -23,6 +23,7 @@ import {
 type Section = "projects" | "orders";
 type ViewState = "loading" | "login" | "ready";
 type ProjectPhase = "realizovani" | "u_realizaciji" | "planirani";
+type SaveState = "idle" | "saving" | "saved" | "error";
 
 type AdminPanelProps = {
   defaultSection?: Section;
@@ -115,6 +116,7 @@ export default function AdminPanel({
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectDetails, setProjectDetails] = useState<Record<number, Project>>({});
   const [projectDrafts, setProjectDrafts] = useState<Record<number, Partial<Project>>>({});
+  const [projectSaveState, setProjectSaveState] = useState<Record<number, SaveState>>({});
   const [uploadingProject, setUploadingProject] = useState<number | null>(null);
 
   const [orders, setOrders] = useState<Order[]>([]);
@@ -131,6 +133,10 @@ export default function AdminPanel({
   });
   const [newHero, setNewHero] = useState<File | null>(null);
   const [newGallery, setNewGallery] = useState<File[]>([]);
+  const [createState, setCreateState] = useState<SaveState>("idle");
+
+  const createFormRef = useRef<HTMLFormElement | null>(null);
+  const projectListRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     void refreshProjects();
@@ -258,11 +264,13 @@ export default function AdminPanel({
     event.preventDefault();
     if (!newProject.title.trim()) {
       setMessage("Naslov je obavezan.");
+      setCreateState("error");
       return;
     }
 
     setBusy(true);
     setMessage(null);
+    setCreateState("saving");
 
     try {
       const created = await adminCreateProject({
@@ -296,6 +304,8 @@ export default function AdminPanel({
 
       await refreshProjects();
       setMessage("Projekat je uspesno dodat.");
+      setCreateState("saved");
+      window.setTimeout(() => setCreateState("idle"), 2000);
     } catch (error) {
       if (error instanceof ApiError) {
         const bodyError =
@@ -304,6 +314,7 @@ export default function AdminPanel({
       } else {
         setMessage("Neuspesno dodavanje projekta.");
       }
+      setCreateState("error");
     } finally {
       setBusy(false);
     }
@@ -318,6 +329,7 @@ export default function AdminPanel({
 
     setBusy(true);
     setMessage(null);
+    setProjectSaveState((prev) => ({ ...prev, [id]: "saving" }));
     try {
       await adminUpdateProject(id, draft);
       setProjectDrafts((prev) => {
@@ -328,6 +340,10 @@ export default function AdminPanel({
       await refreshProjectDetail(id);
       await refreshProjects();
       setMessage("Projekat je sacuvan.");
+      setProjectSaveState((prev) => ({ ...prev, [id]: "saved" }));
+      window.setTimeout(() => {
+        setProjectSaveState((prev) => ({ ...prev, [id]: "idle" }));
+      }, 2200);
     } catch (error) {
       if (error instanceof ApiError) {
         const bodyError =
@@ -336,6 +352,7 @@ export default function AdminPanel({
       } else {
         setMessage("Neuspesno cuvanje projekta.");
       }
+      setProjectSaveState((prev) => ({ ...prev, [id]: "error" }));
     } finally {
       setBusy(false);
     }
@@ -546,21 +563,54 @@ export default function AdminPanel({
 
           {section === "projects" && (
             <section className="space-y-6">
-              <form onSubmit={handleCreateProject} className="grid gap-3 rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
-                <h3 className="text-lg font-semibold text-dark">Dodaj novi projekat</h3>
-                <input
-                  placeholder="Naslov*"
-                  value={newProject.title}
-                  onChange={(e) => setNewProject((prev) => ({ ...prev, title: e.target.value }))}
-                  className="rounded-lg border border-black/10 px-3 py-2"
-                  required
-                />
-                <input
-                  placeholder="Slug (opciono)"
-                  value={newProject.slug}
-                  onChange={(e) => setNewProject((prev) => ({ ...prev, slug: e.target.value }))}
-                  className="rounded-lg border border-black/10 px-3 py-2"
-                />
+              <div className="sticky top-[70px] z-10 flex flex-wrap gap-2 rounded-2xl border border-black/5 bg-white/95 p-3 backdrop-blur">
+                <button
+                  type="button"
+                  onClick={() => createFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  className="rounded-full bg-dark px-4 py-2 text-sm font-semibold text-white"
+                >
+                  + Dodaj projekat
+                </button>
+                <button
+                  type="button"
+                  onClick={() => projectListRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-dark"
+                >
+                  Lista projekata ({mergedProjects.length})
+                </button>
+                {createState === "saved" && (
+                  <span className="rounded-full bg-emerald-100 px-3 py-2 text-xs font-semibold text-emerald-700">
+                    Projekat je uspesno dodat
+                  </span>
+                )}
+              </div>
+
+              <form
+                ref={createFormRef}
+                onSubmit={handleCreateProject}
+                className="grid gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-sm"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h3 className="text-lg font-semibold text-dark">Dodaj novi projekat</h3>
+                  <span className="text-xs font-semibold text-gray-500">Obavezno polje: Naslov</span>
+                </div>
+
+                <div className="grid gap-3 md:grid-cols-2">
+                  <input
+                    placeholder="Naslov*"
+                    value={newProject.title}
+                    onChange={(e) => setNewProject((prev) => ({ ...prev, title: e.target.value }))}
+                    className="rounded-lg border border-black/10 px-3 py-2"
+                    required
+                  />
+                  <input
+                    placeholder="Slug (opciono)"
+                    value={newProject.slug}
+                    onChange={(e) => setNewProject((prev) => ({ ...prev, slug: e.target.value }))}
+                    className="rounded-lg border border-black/10 px-3 py-2"
+                  />
+                </div>
+
                 <textarea
                   placeholder="Kratak opis"
                   value={newProject.excerpt}
@@ -573,31 +623,35 @@ export default function AdminPanel({
                   onChange={(e) => setNewProject((prev) => ({ ...prev, body: e.target.value }))}
                   className="min-h-[140px] rounded-lg border border-black/10 px-3 py-2"
                 />
-                <select
-                  value={newProject.status}
-                  onChange={(e) => setNewProject((prev) => ({ ...prev, status: e.target.value }))}
-                  className="w-fit rounded-lg border border-black/10 px-3 py-2"
-                >
-                  {projectStatusOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
 
-                <select
-                  value={newProject.phase}
-                  onChange={(e) =>
-                    setNewProject((prev) => ({ ...prev, phase: e.target.value as ProjectPhase }))
-                  }
-                  className="w-fit rounded-lg border border-black/10 px-3 py-2"
-                >
-                  {projectPhaseOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                <div className="grid gap-3 md:grid-cols-2">
+                  <select
+                    value={newProject.status}
+                    onChange={(e) => setNewProject((prev) => ({ ...prev, status: e.target.value }))}
+                    className="rounded-lg border border-black/10 px-3 py-2"
+                  >
+                    {projectStatusOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={newProject.phase}
+                    onChange={(e) =>
+                      setNewProject((prev) => ({ ...prev, phase: e.target.value as ProjectPhase }))
+                    }
+                    className="rounded-lg border border-black/10 px-3 py-2"
+                  >
+                    {projectPhaseOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <label className="inline-flex items-center gap-2 text-sm font-semibold text-gray-700">
                   <input
                     type="checkbox"
@@ -607,56 +661,102 @@ export default function AdminPanel({
                   Koristi hero sliku kao naslovnu za grupu
                 </label>
 
-                <label className="text-sm font-semibold text-gray-700">
-                  Hero slika
-                  <input type="file" accept="image/*" onChange={(e) => setNewHero(e.target.files?.[0] || null)} className="mt-1 block w-full text-sm" />
-                </label>
+                <div className="grid gap-3 md:grid-cols-2">
+                  <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/20 bg-gray-50 px-4 py-3 text-sm font-semibold text-dark transition hover:border-primary/60 hover:bg-white">
+                    <span>{newHero ? `Hero: ${newHero.name}` : "Izaberi hero sliku"}</span>
+                    <span className="rounded-full bg-dark px-3 py-1 text-xs text-white">Upload</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setNewHero(e.target.files?.[0] || null)}
+                      className="hidden"
+                    />
+                  </label>
 
-                <label className="text-sm font-semibold text-gray-700">
-                  Galerija slika
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={(e) => setNewGallery(Array.from(e.target.files || []))}
-                    className="mt-1 block w-full text-sm"
-                  />
-                  <span className="mt-1 block text-xs font-normal text-gray-500">
-                    Mozes izabrati jednu ili vise slika.
-                  </span>
-                </label>
+                  <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/20 bg-gray-50 px-4 py-3 text-sm font-semibold text-dark transition hover:border-primary/60 hover:bg-white">
+                    <span>{newGallery.length ? `Galerija: ${newGallery.length} slika` : "Izaberi galeriju slika"}</span>
+                    <span className="rounded-full bg-dark px-3 py-1 text-xs text-white">Upload</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) => setNewGallery(Array.from(e.target.files || []))}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
 
-                <button type="submit" disabled={busy} className="w-fit rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white">
-                  {busy ? "Cuvanje..." : "Dodaj projekat"}
-                </button>
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="submit"
+                    disabled={busy}
+                    className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white"
+                  >
+                    {createState === "saving" ? "Cuvanje..." : "Dodaj projekat"}
+                  </button>
+                  {createState === "error" && (
+                    <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
+                      Nije sacuvano
+                    </span>
+                  )}
+                </div>
               </form>
 
-              <div className="grid gap-4">
+              <div ref={projectListRef} className="grid gap-4">
                 {mergedProjects.map((project) => {
                   const value = projectDrafts[project.id] || {};
                   const live = { ...project, ...value };
                   const phase = getProjectPhase(live.tags);
                   const groupCover = isGroupCover(live.tags);
+                  const saveState = projectSaveState[project.id] || "idle";
+                  const hasDraftChanges = Boolean(projectDrafts[project.id]);
 
                   return (
-                    <article key={project.id} className="grid gap-3 rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
+                    <article key={project.id} className="grid gap-4 rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <h4 className="text-lg font-semibold text-dark">{project.title}</h4>
-                        <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
-                          {projectPhaseOptions.find((option) => option.value === phase)?.label}
-                        </span>
+                        <div className="space-y-1">
+                          <h4 className="text-lg font-semibold text-dark">{project.title}</h4>
+                          <p className="text-xs text-gray-500">ID: {project.id}</p>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                            {projectPhaseOptions.find((option) => option.value === phase)?.label}
+                          </span>
+                          {saveState === "saving" && (
+                            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
+                              Cuvanje...
+                            </span>
+                          )}
+                          {saveState === "saved" && (
+                            <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                              Sacuvano
+                            </span>
+                          )}
+                          {saveState === "error" && (
+                            <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
+                              Greska pri cuvanju
+                            </span>
+                          )}
+                          {hasDraftChanges && saveState !== "saving" && (
+                            <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700">
+                              Nesacuvane izmene
+                            </span>
+                          )}
+                        </div>
                       </div>
 
-                      <input
-                        value={String(live.title || "")}
-                        onChange={(e) => changeProjectDraft(project.id, "title", e.target.value)}
-                        className="rounded-lg border border-black/10 px-3 py-2"
-                      />
-                      <input
-                        value={String(live.slug || "")}
-                        onChange={(e) => changeProjectDraft(project.id, "slug", e.target.value)}
-                        className="rounded-lg border border-black/10 px-3 py-2"
-                      />
+                      <div className="grid gap-3 md:grid-cols-2">
+                        <input
+                          value={String(live.title || "")}
+                          onChange={(e) => changeProjectDraft(project.id, "title", e.target.value)}
+                          className="rounded-lg border border-black/10 px-3 py-2"
+                        />
+                        <input
+                          value={String(live.slug || "")}
+                          onChange={(e) => changeProjectDraft(project.id, "slug", e.target.value)}
+                          className="rounded-lg border border-black/10 px-3 py-2"
+                        />
+                      </div>
                       <textarea
                         value={String(live.excerpt || "")}
                         onChange={(e) => changeProjectDraft(project.id, "excerpt", e.target.value)}
@@ -667,28 +767,30 @@ export default function AdminPanel({
                         onChange={(e) => changeProjectDraft(project.id, "body", e.target.value)}
                         className="min-h-[140px] rounded-lg border border-black/10 px-3 py-2"
                       />
-                      <select
-                        value={String(live.status || "draft")}
-                        onChange={(e) => changeProjectDraft(project.id, "status", e.target.value)}
-                        className="w-fit rounded-lg border border-black/10 px-3 py-2"
-                      >
-                        {projectStatusOptions.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                      <select
-                        value={phase}
-                        onChange={(e) => changeProjectPhaseDraft(project.id, e.target.value as ProjectPhase)}
-                        className="w-fit rounded-lg border border-black/10 px-3 py-2"
-                      >
-                        {projectPhaseOptions.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="grid gap-3 md:grid-cols-2">
+                        <select
+                          value={String(live.status || "draft")}
+                          onChange={(e) => changeProjectDraft(project.id, "status", e.target.value)}
+                          className="rounded-lg border border-black/10 px-3 py-2"
+                        >
+                          {projectStatusOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                        <select
+                          value={phase}
+                          onChange={(e) => changeProjectPhaseDraft(project.id, e.target.value as ProjectPhase)}
+                          className="rounded-lg border border-black/10 px-3 py-2"
+                        >
+                          {projectPhaseOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                       <label className="inline-flex items-center gap-2 text-sm font-semibold text-gray-700">
                         <input
                           type="checkbox"
@@ -702,31 +804,32 @@ export default function AdminPanel({
                         <img src={live.hero_image} alt={live.title || "Project hero"} className="h-44 w-full rounded-xl object-cover" />
                       )}
 
-                      <label className="text-sm font-semibold text-gray-700">
-                        Promeni hero sliku
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => void handleProjectHeroUpload(project.id, e.target.files)}
-                          disabled={uploadingProject === project.id}
-                          className="mt-1 block w-full text-sm"
-                        />
-                      </label>
+                      <div className="grid gap-3 md:grid-cols-2">
+                        <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/20 bg-gray-50 px-4 py-3 text-sm font-semibold text-dark transition hover:border-primary/60 hover:bg-white">
+                          <span>{uploadingProject === project.id ? "Upload u toku..." : "Promeni hero sliku"}</span>
+                          <span className="rounded-full bg-dark px-3 py-1 text-xs text-white">Upload</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => void handleProjectHeroUpload(project.id, e.target.files)}
+                            disabled={uploadingProject === project.id}
+                            className="hidden"
+                          />
+                        </label>
 
-                      <label className="text-sm font-semibold text-gray-700">
-                        Dodaj slike u galeriju
-                        <input
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          onChange={(e) => void handleProjectGalleryUpload(project.id, e.target.files)}
-                          disabled={uploadingProject === project.id}
-                          className="mt-1 block w-full text-sm"
-                        />
-                        <span className="mt-1 block text-xs font-normal text-gray-500">
-                          Mozes izabrati jednu ili vise slika.
-                        </span>
-                      </label>
+                        <label className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-black/20 bg-gray-50 px-4 py-3 text-sm font-semibold text-dark transition hover:border-primary/60 hover:bg-white">
+                          <span>{uploadingProject === project.id ? "Upload u toku..." : "Dodaj slike u galeriju"}</span>
+                          <span className="rounded-full bg-dark px-3 py-1 text-xs text-white">Upload</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={(e) => void handleProjectGalleryUpload(project.id, e.target.files)}
+                            disabled={uploadingProject === project.id}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
 
                       {projectDetails[project.id]?.gallery && projectDetails[project.id]?.gallery?.length ? (
                         <div className="grid gap-2 sm:grid-cols-3">
@@ -760,9 +863,9 @@ export default function AdminPanel({
                           type="button"
                           onClick={() => void handleSaveProject(project.id)}
                           className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
-                          disabled={busy}
+                          disabled={busy || !hasDraftChanges || saveState === "saving"}
                         >
-                          Sacuvaj
+                          {saveState === "saving" ? "Cuvanje..." : "Sacuvaj"}
                         </button>
                         <button
                           type="button"
