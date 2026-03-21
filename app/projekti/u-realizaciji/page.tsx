@@ -7,6 +7,7 @@ import { getProjects } from "@/lib/api";
 import type { Project } from "@/lib/api";
 import { filterProjectsByPhase } from "@/lib/project-phase";
 import { getGroupCoverImage } from "@/lib/project-group-cover";
+import { getProjectHref } from "@/lib/project-links";
 
 export const metadata: Metadata = {
   title: "Projekti u realizaciji",
@@ -55,11 +56,9 @@ export default async function InProgressProjectsPage() {
           </ScrollReveal>
         ) : (
           <StaggerReveal className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" stagger={0.08}>
-            {inProgress
-              .filter((project) => typeof project.slug === "string" && project.slug.trim().length > 0)
-              .map((project) => (
+            {inProgress.map((project) => (
               <ScrollReveal key={project.id} from="up" className="h-full">
-                <Link href={`/projekat?slug=${project.slug}&id=${project.id}`} className="group block h-full">
+                <Link href={getProjectHref(project)} className="group block h-full">
                   <TiltCard className="h-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md">
                     <article>
                       <div className="h-52 overflow-hidden">

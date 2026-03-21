@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Order, Project } from "@/lib/api";
 import { getProjects } from "@/lib/api";
+import { getProjectHref } from "@/lib/project-links";
 import {
   ApiError,
   adminCreateProject,
@@ -849,9 +850,9 @@ export default function AdminPanel({
                       ) : null}
 
                       <div className="flex flex-wrap gap-2">
-                        {live.slug && live.status === "published" ? (
+                        {live.status === "published" ? (
                           <a
-                            href={`/projekat?slug=${live.slug}&id=${project.id}`}
+                            href={getProjectHref({ id: project.id, slug: live.slug || "" })}
                             target="_blank"
                             rel="noreferrer"
                             className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-dark"

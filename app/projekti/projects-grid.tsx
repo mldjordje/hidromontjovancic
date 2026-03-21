@@ -1,6 +1,7 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { getProjects } from "@/lib/api";
+import { getProjectHref } from "@/lib/project-links";
 
 type Props = {
   featured?: boolean;
@@ -26,7 +27,7 @@ export default async function ProjectsGrid({ featured = false, limit = 12 }: Pro
       {data.map((project) => (
         <Link
           key={project.id}
-          href={`/projekat?slug=${project.slug}&id=${project.id}`}
+          href={getProjectHref(project)}
           className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
         >
           <div className="relative aspect-[4/3] bg-gray-100">
