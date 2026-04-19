@@ -13,12 +13,18 @@ export default function AdminLandingPage() {
 
         <InstallAdminApp />
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Link
             href="/admin/projects"
             className="rounded-2xl border border-black/5 bg-white px-5 py-6 text-center text-sm font-semibold text-dark shadow-sm transition hover:-translate-y-1"
           >
             Projekti
+          </Link>
+          <Link
+            href="/admin/galerije"
+            className="rounded-2xl border border-black/5 bg-white px-5 py-6 text-center text-sm font-semibold text-dark shadow-sm transition hover:-translate-y-1"
+          >
+            Galerije usluga
           </Link>
           <Link
             href="/admin/orders"

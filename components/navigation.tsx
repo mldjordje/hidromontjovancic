@@ -16,6 +16,7 @@ const links: NavLink[] = [
   { href: "/", label: "Pocetna" },
   { href: "/o-nama", label: "O nama" },
   { href: "/usluge", label: "Usluge" },
+  { href: "/galerija", label: "Galerija" },
   { href: "/projekti", label: "Projekti" },
   { href: "/kontakt", label: "Kontakt" },
 ];

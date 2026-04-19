@@ -1,4 +1,4 @@
-import type { Order, Project } from "./api";
+import type { Order, Project, ServiceGallery, ServiceGalleryImage } from "./api";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost/api";
 
@@ -116,6 +116,29 @@ export async function deleteGalleryImage(projectId: number, mediaId: number) {
   return adminFetch<{ ok: boolean }>(`/admin/projects/${projectId}/media/${mediaId}`, {
     method: "DELETE",
   });
+}
+
+export async function adminGetServiceGallery(serviceSlug: string) {
+  return adminFetch<ServiceGallery>(`/admin/service-galleries/${encodeURIComponent(serviceSlug)}`, {
+    method: "GET",
+  });
+}
+
+export async function adminUploadServiceGalleryImage(serviceSlug: string, file: File, alt?: string) {
+  const form = new FormData();
+  form.append("file", file);
+  if (alt) form.append("alt", alt);
+  return adminFetch<ServiceGalleryImage>(`/admin/service-galleries/${encodeURIComponent(serviceSlug)}/media`, {
+    method: "POST",
+    body: form,
+  });
+}
+
+export async function adminDeleteServiceGalleryImage(serviceSlug: string, mediaId: number) {
+  return adminFetch<{ ok: boolean }>(
+    `/admin/service-galleries/${encodeURIComponent(serviceSlug)}/media/${mediaId}`,
+    { method: "DELETE" }
+  );
 }
 
 export async function adminListOrders(status: string = "all") {

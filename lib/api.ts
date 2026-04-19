@@ -13,6 +13,18 @@ export type Project = {
   status?: string;
 };
 
+export type ServiceGalleryImage = {
+  id: number;
+  src: string;
+  alt?: string | null;
+  sort_order?: number;
+};
+
+export type ServiceGallery = {
+  service_slug: string;
+  images: ServiceGalleryImage[];
+};
+
 export type Order = {
   id: number;
   name: string;
@@ -55,4 +67,9 @@ export async function getProject(slug: string) {
 
 export async function getProjectById(id: number | string) {
   return fetchJson<Project>(`/projects-id/${encodeURIComponent(String(id))}`, { cache: "no-store" });
+}
+
+export async function getServiceGalleries(serviceSlug?: string) {
+  const qp = serviceSlug ? `?service=${encodeURIComponent(serviceSlug)}` : "";
+  return fetchJson<{ data: ServiceGallery[] }>(`/service-galleries${qp}`, { cache: "no-store" });
 }

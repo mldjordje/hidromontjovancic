@@ -8,6 +8,7 @@ export type HeroSlide = {
 };
 
 export type Service = {
+  slug: string;
   title: string;
   description: string;
   image: string;
@@ -72,31 +73,37 @@ export const heroSlides: HeroSlide[] = [
 
 export const services: Service[] = [
   {
+    slug: "vodovodne-i-kanalizacione-instalacije",
     title: "Vodovodne i kanalizacione instalacije",
     description: "Kompletna izvedba unutrasnjih instalacija vode i kanalizacije za sve tipove objekata.",
     image: "/oldsite/usluge/usluga1.jpg",
   },
   {
+    slug: "ulicna-vodovodna-i-kanalizaciona-mreza",
     title: "Ulicna vodovodna i kanalizaciona mreza",
     description: "Ugradnja infrastrukture vodovoda i kanalizacije u ulicnoj mrezi.",
     image: "/oldsite/usluge/usluga2.jpg",
   },
   {
+    slug: "montaza-sanitarije-i-galanterije",
     title: "Montaza sanitarije i galanterije",
     description: "Profesionalna Montaza sanitarnih elemenata i pratece opreme.",
     image: "/oldsite/usluge/usluga3.jpg",
   },
   {
+    slug: "protivpozarne-instalacije",
     title: "Protivpozarne instalacije",
     description: "Izvodjenje radova na protivpozarnoj instalaciji po tehnickim standardima.",
     image: "/oldsite/usluge/usluga4.jpg",
   },
   {
+    slug: "zemljani-radovi-i-iskopi",
     title: "Zemljani radovi i iskopi",
     description: "Pruzanje usluga zemljanih radova, rusenja objekata i svih vrsta iskopa.",
     image: "/oldsite/usluge/usluga5.jpg",
   },
   {
+    slug: "instalacija-pumpi-i-centralnih-bojlera",
     title: "Instalacija pumpi i centralnih bojlera",
     description: "Montaza i pustanje u rad pumpi, bojlera i pratece instalacione opreme.",
     image: "/oldsite/usluge/usluga6.jpg",
