@@ -32,8 +32,9 @@ export default function ServicesPage() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
-            <article
+            <Link
               key={service.title}
+              href={`/usluge/${service.slug}`}
               className="overflow-hidden rounded-2xl border border-black/5 bg-white shadow-md"
             >
               <div className="h-44 overflow-hidden">
@@ -42,8 +43,9 @@ export default function ServicesPage() {
               <div className="space-y-2 p-5">
                 <h3 className="text-lg font-semibold text-dark">{service.title}</h3>
                 <p className="text-sm text-gray-700">{service.description}</p>
+                <p className="pt-1 text-sm font-semibold text-primary">Pogledaj galeriju</p>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </section>
