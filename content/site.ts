@@ -94,7 +94,7 @@ export const services: Service[] = [
     slug: "protivpozarne-instalacije",
     title: "Protivpozarne instalacije",
     description: "Izvodjenje radova na protivpozarnoj instalaciji po tehnickim standardima.",
-    image: "/oldsite/usluge/usluga4.jpg",
+    image: "/img/services/protivpozarne-instalacije.jpg",
   },
   {
     slug: "zemljani-radovi-i-iskopi",

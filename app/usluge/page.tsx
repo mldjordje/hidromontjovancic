@@ -17,7 +17,7 @@ export default function ServicesPage() {
         title="Usluge"
         kicker="HIDRO MONT JOVANČIĆ"
         description="Kompletne instalacione i terenske usluge za stambene, poslovne i infrastrukturne projekte."
-        background="/oldsite/p7.jpg"
+        background="/img/services/services-hero.jpg"
         priority
         actions={[{ label: "Posalji upit", href: "/kontakt#forma" }]}
       />
