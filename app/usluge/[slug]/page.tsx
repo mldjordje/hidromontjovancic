@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import PageHero from "@/components/page-hero";
 import { services } from "@/content/site";
 import { getServiceGalleries } from "@/lib/api";
+import { absoluteUrl, brandName, siteUrl } from "@/lib/seo";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -16,8 +18,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: service.title,
-    description: service.description,
+    description: `${service.description} ${brandName} izvodi radove u Nisu i okolini.`,
     alternates: { canonical: `/usluge/${service.slug}` },
+    openGraph: {
+      type: "website",
+      title: `${service.title} | ${brandName}`,
+      description: service.description,
+      url: `/usluge/${service.slug}`,
+      images: [{ url: absoluteUrl(service.image), alt: service.title }],
+    },
   };
 }
 
@@ -28,6 +37,21 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   const res = await getServiceGalleries(service.slug);
   const images = res.data?.[0]?.images ?? [];
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.description,
+    provider: {
+      "@type": "LocalBusiness",
+      name: brandName,
+      url: siteUrl,
+      telephone: "+381637012339",
+      areaServed: ["Nis", "Niska Banja", "Leskovac", "Prokuplje", "Aleksinac"],
+    },
+    areaServed: ["Nis", "Niska Banja", "Leskovac", "Prokuplje", "Aleksinac"],
+    url: `${siteUrl}/usluge/${service.slug}`,
+  };
 
   return (
     <div className="space-y-16 sm:space-y-24">
@@ -41,6 +65,10 @@ export default async function ServiceDetailPage({ params }: Props) {
           { label: "Posalji upit", href: "/kontakt#forma" },
           { label: "Sve usluge", href: "/usluge" },
         ]}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
 
       <section className="content-section space-y-6">
@@ -64,9 +92,11 @@ export default async function ServiceDetailPage({ params }: Props) {
                 rel="noreferrer"
                 className="group overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm"
               >
-                <img
+                <Image
                   src={img.src}
                   alt={img.alt || service.title}
+                  width={640}
+                  height={448}
                   className="h-56 w-full object-cover transition group-hover:scale-[1.02]"
                 />
               </a>
@@ -85,4 +115,3 @@ export default async function ServiceDetailPage({ params }: Props) {
 export async function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
 }
-

@@ -20,7 +20,7 @@ export type Stat = {
 };
 
 export const company = {
-  name: "HIDRO MONT JOVANČIĆ",
+  name: "HIDRO MONT JOVANCIC",
   tagline: "Vodovodne i kanalizacione instalacije",
   phone: "+381 63 701 2339",
   email: "hidromontjovancic@gmail.com",
@@ -30,47 +30,46 @@ export const company = {
 
 export const heroSlides: HeroSlide[] = [
   {
-    title: "HIDRO MONT JOVANČIĆ",
-    kicker: "HIDRO MONT JOVANČIĆ",
-    description: "Vodovodne i kanalizacione instalacije za stambene, poslovne i infrastrukturne objekte.",
+    title: "Vodovod i kanalizacija",
+    kicker: "HIDRO MONT JOVANCIC",
+    description: "Izvodjenje instalacija, PP mreza i iskopa u Nisu i okolini.",
     ctaLabel: "Posalji upit",
     ctaHref: "/kontakt#forma",
     image: "/oldsite/p1.jpg",
   },
   {
-    title: "HIDRO MONT JOVANČIĆ",
+    title: "Infrastrukturni radovi",
     kicker: "Infrastrukturni i terenski radovi",
-    description: "Ugradnja infrastrukture vodovoda i kanalizacije uz pripremu terena i iskope.",
+    description: "Ulicne mreze, priprema terena i masinski iskopi.",
     ctaLabel: "Kontakt",
     ctaHref: "/kontakt#forma",
     image: "/oldsite/p2.jpg",
   },
   {
-    title: "HIDRO MONT JOVANČIĆ",
+    title: "Sanitarije i PP instalacije",
     kicker: "Sanitarije, PP instalacije i bojeri",
-    description: "Montaza sanitarije, protivpozarnih instalacija i centralnih bojlera po projektu.",
+    description: "Montaza sanitarije, PP instalacija, pumpi i centralnih bojlera.",
     ctaLabel: "Pogledaj usluge",
     ctaHref: "/usluge",
     image: "/oldsite/p3.jpg",
   },
   {
-    title: "HIDRO MONT JOVANČIĆ",
+    title: "Iskopi i zemljani radovi",
     kicker: "Iskopi i zemljani radovi",
-    description: "Pruzanje usluga zemljanih radova, rusenja objekata i svih vrsta iskopa.",
+    description: "Zemljani radovi, rusenje objekata i priprema gradilista.",
     ctaLabel: "Posalji upit",
     ctaHref: "/kontakt#forma",
     image: "/oldsite/p4.jpg",
   },
   {
-    title: "HIDRO MONT JOVANČIĆ",
+    title: "Kompletna izvedba",
     kicker: "Vodovod i kanalizacija",
-    description: "Pouzdan tim za kompletne instalacije i dugotrajna tehnicka resenja.",
+    description: "Od iskopa do zavrsne montaze, po projektu i u roku.",
     ctaLabel: "Kontakt",
     ctaHref: "/kontakt#forma",
     image: "/oldsite/p5.jpg",
   },
 ];
-
 export const services: Service[] = [
   {
     slug: "vodovodne-i-kanalizacione-instalacije",

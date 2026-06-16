@@ -6,6 +6,7 @@ import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import HeroUIProviders from "@/components/heroui-provider";
 import PwaRegister from "@/components/pwa-register";
+import { brandName, brandNameWithDiacritics, siteUrl } from "@/lib/seo";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -15,14 +16,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://hidromontjovancic.rs"),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "HIDRO MONT JOVANČIĆ | Vodovodne i kanalizacione instalacije",
-    template: "%s | HIDRO MONT JOVANČIĆ",
+    default: `${brandName} | Vodovodne i kanalizacione instalacije`,
+    template: `%s | ${brandName}`,
   },
   description:
-    "HIDRO MONT JOVANČIĆ, Nis - vodovodne i kanalizacione instalacije, montaza sanitarije, protivpozarne instalacije, zemljani radovi i iskopi.",
-  applicationName: "HIDRO MONT JOVANČIĆ",
+    "HIDRO MONT JOVANCIC, Nis - vodovodne i kanalizacione instalacije, montaza sanitarije, protivpozarne instalacije, zemljani radovi i iskopi.",
+  applicationName: brandName,
   category: "construction",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
@@ -39,6 +40,8 @@ export const metadata: Metadata = {
   },
   keywords: [
     "hidromont jovancic",
+    "hidro mont jovancic",
+    "hidro mont jovančić",
     "hidromont nis",
     "vodovodne instalacije",
     "kanalizacione instalacije",
@@ -56,8 +59,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sr_RS",
     url: "/",
-    siteName: "HIDRO MONT JOVANČIĆ",
-    title: "HIDRO MONT JOVANČIĆ | Vodovodne i kanalizacione instalacije",
+    siteName: brandName,
+    title: `${brandName} | Vodovodne i kanalizacione instalacije`,
     description:
       "Strucni tim za instalacione i zemljane radove: vodovod, kanalizacija, sanitarije, PP mreza i iskopi.",
     images: [
@@ -65,13 +68,13 @@ export const metadata: Metadata = {
         url: "/oldsite/p1.jpg",
         width: 1200,
         height: 630,
-        alt: "HIDRO MONT JOVANČIĆ - vodovodne i kanalizacione instalacije",
+        alt: `${brandName} - vodovodne i kanalizacione instalacije`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "HIDRO MONT JOVANČIĆ | Vodovodne i kanalizacione instalacije",
+    title: `${brandName} | Vodovodne i kanalizacione instalacije`,
     description:
       "Vodovodne i kanalizacione instalacije, PP mreza, sanitarije, zemljani radovi i iskopi u Nisu i okolini.",
     images: ["/oldsite/p1.jpg"],
@@ -90,9 +93,10 @@ export default function RootLayout({
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: "HIDRO MONT JOVANČIĆ",
-    image: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://hidromontjovancic.rs"}/oldsite/p1.jpg`,
-    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hidromontjovancic.rs",
+    name: brandName,
+    alternateName: [brandNameWithDiacritics, "Hidromont Jovancic", "Hidromont Nis"],
+    image: `${siteUrl}/oldsite/p1.jpg`,
+    url: siteUrl,
     telephone: "+381637012339",
     email: "hidromontjovancic@gmail.com",
     address: {

@@ -56,10 +56,7 @@ export default function HeroSlider({ slides }: Props) {
     img.src = next.image;
   }, [autoPlay, index, slides]);
 
-  const label = useMemo(
-    () => "Vodovod i kanalizacija · PP mreza · zemljani radovi · Nis",
-    []
-  );
+  const label = useMemo(() => "Nis i juzna Srbija", []);
 
   function handleTouchStart(event: React.TouchEvent<HTMLElement>) {
     const touch = event.touches[0];
@@ -109,30 +106,9 @@ export default function HeroSlider({ slides }: Props) {
           </motion.div>
         </AnimatePresence>
       </div>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={`${activeSlide.image}-overlay`}
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.02 }}
-          transition={{ duration: 1, ease: fadeEase }}
-          className="absolute inset-0 bg-black/70"
-        />
-      </AnimatePresence>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/78 via-black/62 to-black/35" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,0,0,0.45)_100%)]" />
-      <motion.div
-        aria-hidden
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, rotate: 6 }}
-        transition={{ duration: 2.4, ease: fadeEase }}
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(circle at 15% 25%, rgba(15,110,207,0.34), transparent 35%), radial-gradient(circle at 85% 65%, rgba(255,255,255,0.1), transparent 35%)",
-        }}
-      />
-      <div className="relative z-10 mx-auto flex min-h-[78vh] max-w-6xl flex-col items-center justify-center gap-8 px-4 py-16 text-center sm:px-6 lg:items-start lg:px-8 lg:text-left">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/5" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/45 to-transparent" />
+      <div className="relative z-10 mx-auto flex min-h-[72vh] max-w-6xl flex-col items-center justify-end gap-7 px-4 pb-14 pt-28 text-center sm:px-6 sm:pb-20 lg:items-start lg:px-8 lg:text-left">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSlide.title}
@@ -140,30 +116,30 @@ export default function HeroSlider({ slides }: Props) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -24 }}
             transition={{ duration: 0.85, ease: fadeEase }}
-            className="w-full max-w-4xl space-y-5 rounded-3xl border border-white/20 bg-black/52 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.52)] backdrop-blur-lg sm:p-8"
+            className="w-full max-w-3xl space-y-5"
           >
             <div className="space-y-4">
-              <span className="inline-flex rounded-full border border-white/20 bg-black/25 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white/95">
+              <span className="inline-flex rounded-full border border-white/25 bg-black/25 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-white/95 backdrop-blur-sm">
                 {activeSlide.kicker}
               </span>
-              <h1 className="text-4xl font-bold leading-[0.95] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.7)] sm:text-6xl lg:text-7xl">
+              <h1 className="text-4xl font-bold leading-[0.98] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.72)] sm:text-6xl lg:text-7xl">
                 {activeSlide.title}
               </h1>
-              <p className="mx-auto max-w-3xl text-lg font-medium text-white/95 drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)] sm:text-xl">
+              <p className="mx-auto max-w-2xl text-base font-medium text-white/95 drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)] sm:text-xl lg:mx-0">
                 {activeSlide.description}
               </p>
-              <p className="text-xs uppercase tracking-[0.2em] text-white/90">{label}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/90">{label}</p>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
               <Link
                 href={activeSlide.ctaHref}
-                className="inline-flex items-center rounded-full bg-[#0f6ecf] px-5 py-3 text-sm font-semibold text-white shadow-[0_20px_60px_rgba(15,110,207,0.35)] transition hover:bg-[#0b5cb0] hover:translate-y-[-3px]"
+                className="inline-flex items-center rounded-full bg-[#0f6ecf] px-5 py-3 text-sm font-semibold text-white shadow-[0_20px_60px_rgba(15,110,207,0.35)] transition hover:translate-y-[-3px] hover:bg-[#0b5cb0]"
               >
-                Zelis da radis sa nama
+                {activeSlide.ctaLabel}
               </Link>
               <Link
                 href="/usluge"
-                className="inline-flex items-center rounded-full border border-white/30 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-dark"
+                className="inline-flex items-center rounded-full border border-white/35 bg-black/15 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white hover:text-dark"
               >
                 Pogledaj usluge
               </Link>
